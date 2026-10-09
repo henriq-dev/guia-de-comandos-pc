@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Guia prático de comandos CMD e Executar e roteiro de atendimento remoto para manutenção e otimização do Windows." />
+  <title>Técnico Henrique | Guia de Comandos &amp; Roteiro de Atendimento</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ÂNCORA: menu principal (troca entre as duas páginas) -->
+  <nav class="top-nav" aria-label="Navegação principal">
+    <button class="nav-link active-nav" data-page="comandos" aria-current="page">⚡ Guia de Comandos</button>
+    <button class="nav-link" data-page="roteiro">📋 Roteiro de Atendimento</button>
+  </nav>
+
+  <!-- ÂNCORA: cabeçalho com busca -->
+  <header class="hero">
+    <span class="badge">Suporte Técnico Remoto</span>
+    <h1>Técnico <span>Henrique</span></h1>
+    <p id="headerSubtitle">Manual prático de comandos de CMD e Executar para manutenção, otimização e limpeza profissional do Windows.</p>
+
+    <div class="search-container" id="searchBox">
+      <label for="searchInput" class="sr-only">Pesquisar comando</label>
+      <input type="search" id="searchInput" placeholder="Pesquisar comando (ex: sfc, temp, dism, rede)..." autocomplete="off" />
+    </div>
+  </header>
+
+  <main>
+
+    <!-- =====================================================
+         PÁGINA 1: GUIA DE COMANDOS
+         ===================================================== -->
+    <section id="pageComandos" class="page-section active-section" aria-label="Guia de comandos">
+      <div class="container">
+
+        <!-- ÂNCORA: filtros por categoria -->
+        <div class="nav-tabs" role="group" aria-label="Filtrar por categoria">
+          <button class="tab-btn active" data-category="all" aria-pressed="true">Todos</button>
+          <button class="tab-btn" data-category="cmd" aria-pressed="false">CMD (Prompt)</button>
+          <button class="tab-btn" data-category="run" aria-pressed="false">Executar (Win+R)</button>
+          <button class="tab-btn" data-category="limpeza" aria-pressed="false">Limpeza</button>
+          <button class="tab-btn" data-category="otimizacao" aria-pressed="false">Otimização</button>
+        </div>
+
+        <div class="grid-cards" id="cardsGrid">
+
+          <article class="card" data-category="cmd limpeza">
+            <div>
+              <div class="card-header"><span class="card-tag tag-cmd">CMD Admin</span></div>
+              <h3>Reparação de Arquivos de Sistema</h3>
+              <p>Varre todos os arquivos protegidos do Windows e substitui as cópias corrompidas pelas originais em cache.</p>
+            </div>
+            <div>
+              <div class="code-box">
+                <code>sfc /scannow</code>
+                <button class="copy-btn" data-copy="sfc /scannow">Copiar</button>
+              </div>
+              <div class="guide-box"><strong>Orientação:</strong> Execute sempre no Prompt de Comando como Administrador. Se indicar "reparo pendente", reinicie o computador antes de tentar novamente.</div>
+            </div>
+          </article>
+
+          <article class="card" data-category="cmd otimizacao">
+            <div>
+              <div class="card-header"><span class="card-tag tag-cmd">CMD Admin</span></div>
+              <h3>Reparo de Imagem do Windows (DISM)</h3>
+              <p>Restaura a imagem base dos componentes do Windows através do Windows Update quando o SFC falha.</p>
+            </div>
+            <div>
+              <div class="code-box">
+                <code>dism /online /cleanup-image /restorehealth</code>
+                <button class="copy-btn" data-copy="dism /online /cleanup-image /restorehealth">Copiar</button>
+              </div>
+              <div class="guide-box"><strong>Orientação:</strong> Requer conexão com a Internet. Execute antes do <code>sfc /scannow</code> se o sistema estiver com graves instabilidades.</div>
+            </div>
+          </article>
+
+          <article class="card" data-category="cmd limpeza">
+            <div>
+              <div class="card-header"><span class="card-tag tag-cmd">CMD Admin</span></div>
+              <h3>Remover Fila de Reparos Pendentes</h3>
+              <p>Cancela atualizações e operações de reparo pendentes que bloqueiam outros utilitários de diagnóstico.</p>
+            </div>
+            <div>
+              <div class="code-box">
+                <code>dism /online /cleanup-image /revertpendingactions</code>
+                <button class="copy-btn" data-copy="dism /online /cleanup-image /revertpendingactions">Copiar</button>
+              </div>
+              <div class="guide-box"><strong>Orientação:</strong> Útil quando o computador fica preso em "reparo de sistema pendente" após atualizações interrompidas. Reinicie em seguida.</div>
+            </div>
+          </article>
+
+          <article class="card" data-category="run limpeza">
+            <div>
+              <div class="card-header"><span class="card-tag tag-run">Win + R</span></div>
+              <h3>Arquivos Temporários do Usuário</h3>
+              <p>Abre a pasta com os arquivos temporários gerados pelos aplicativos da conta atual.</p>
+            </div>
+            <div>
+              <div class="code-box">
+                <code>%temp%</code>
+                <button class="copy-btn" data-copy="%temp%">Copiar</button>
+              </div>
+              <div class="guide-box"><strong>Orientação:</strong> Pressione <code>Ctrl + A</code> para selecionar tudo e <code>Shift + Delete</code> para apagar de forma permanente. Ignore arquivos em uso.</div>
+            </div>
+          </article>
+
+          <article class="card" data-category="run limpeza">
+            <div>
+              <div class="card-header"><span class="card-tag tag-run">Win + R</span></div>
+              <h3>Arquivos Temporários do Sistema</h3>
+              <p>Abre a pasta de arquivos temporários raiz do sistema operacional Windows.</p>
+            </div>
+            <div>
+              <div class="code-box">
+                <code>temp</code>
+                <button class="copy-btn" data-copy="temp">Copiar</button>
+              </div>
+              <div class="guide-box"><strong>Orientação:</strong> Apague o conteúdo periodicamente para liberar espaço no SSD/HD principal.</div>
+            </div>
+          </article>
+
+          <article class="card" data-category="run limpeza">
+            <div>
+              <div class="card-header"><span class="card-tag tag-run">Win + R</span></div>
+              <h3>Cache de Pré-carregamento (Prefetch)</h3>
+              <p>Armazena dados de inicialização de aplicativos. Limpar ajuda quando há erros na execução de softwares.</p>
+            </div>
+            <div>
+              <div class="code-box">
+                <code>prefetch</code>
+                <button class="copy-btn" data-copy="prefetch">Copiar</button>
+              </div>
+              <div class="guide-box"><strong>Orientação:</strong> Requer permissão de administrador ao abrir. Pode apagar todo o conteúdo com segurança.</div>
+            </div>
+          </article>
+
+          <article class="card" data-category="run limpeza">
+            <div>
+              <div class="card-header"><span class="card-tag tag-run">Win + R</span></div>
+              <h3>Limpeza de Disco Avançada</h3>
+              <p>Abre o assistente nativo do Windows para remover atualizações antigas, dumps de memória e lixeira.</p>
+            </div>
+            <div>
+              <div class="code-box">
+                <code>cleanmgr</code>
+                <button class="copy-btn" data-copy="cleanmgr">Copiar</button>
+              </div>
+              <div class="guide-box"><strong>Orientação:</strong> Clique em "Limpar arquivos do sistema" dentro da ferramenta para remover gigabytes de atualizações antigas do Windows.</div>
+            </div>
+          </article>
+
+          <article class="card" data-category="cmd otimizacao">
+            <div>
+              <div class="card-header"><span class="card-tag tag-cmd">CMD Admin</span></div>
+              <h3>Renovar Cache DNS</h3>
+              <p>Limpa o cache de resolução de nomes DNS para corrigir sites que não carregam ou abrem com endereço antigo.</p>
+            </div>
+            <div>
+              <div class="code-box">
+                <code>ipconfig /flushdns</code>
+                <button class="copy-btn" data-copy="ipconfig /flushdns">Copiar</button>
+              </div>
+              <div class="guide-box"><strong>Orientação:</strong> Essencial em atendimentos remotos quando o cliente relata lentidão de navegação ou sites não carregando.</div>
+            </div>
+          </article>
+
+          <article class="card" data-category="run otimizacao">
+            <div>
+              <div class="card-header"><span class="card-tag tag-run">Win + R</span></div>
+              <h3>Configuração do Sistema (MSConfig)</h3>
+              <p>Acessa as definições de inicialização, serviços e opções de boot do sistema.</p>
+            </div>
+            <div>
+              <div class="code-box">
+                <code>msconfig</code>
+                <button class="copy-btn" data-copy="msconfig">Copiar</button>
+              </div>
+              <div class="guide-box"><strong>Orientação:</strong> Na aba "Serviços", marque "Ocultar todos os serviços Microsoft" antes de desativar qualquer item desnecessário.</div>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- ÂNCORA: aviso exibido quando nenhum card passa nos filtros -->
+        <p class="empty-state" id="emptyState" hidden>Nenhum comando encontrado. Tente outro termo ou categoria.</p>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         PÁGINA 2: ROTEIRO DE ATENDIMENTO REMOTO
+         ===================================================== -->
+    <section id="pageRoteiro" class="page-section" aria-label="Roteiro de atendimento">
+      <div class="container">
+        <div class="timeline">
+
+          <article class="step-card">
+            <div class="step-number">Etapa 01 — Primordial</div>
+            <h3>Triagem Inicial &amp; Diagnóstico do Hardware</h3>
+            <p>Antes de alterar qualquer configuração de software, entenda o estado do hardware da máquina do cliente.</p>
+            <ul>
+              <li><strong>Verificar Armazenamento:</strong> Confira em "Este Computador" se o disco (C:) é SSD ou HD mecânico e o espaço livre (menos de 10% livre causa lentidão extrema).</li>
+              <li><strong>Verificar Memória RAM &amp; CPU:</strong> Abra o Gerenciador de Tarefas com <code>Ctrl + Shift + Esc</code> e analise o uso de CPU, RAM e Disco em repouso.</li>
+              <li><strong>Saúde do Disco (S.M.A.R.T.):</strong> Se o disco estiver em 100% constante, verifique a saúde com uma ferramenta leve como o CrystalDiskInfo. Não adianta otimizar o software se o disco estiver danificado.</li>
+            </ul>
+            <div class="tip-box">💡 <strong>Dica do Técnico:</strong> Se o cliente usa HD mecânico como disco do sistema, recomende a migração para SSD como prioridade máxima de upgrade.</div>
+          </article>
+
+          <article class="step-card">
+            <div class="step-number">Etapa 02 — Inicialização &amp; Processos</div>
+            <h3>Limpeza de Inicialização (Boot Limpo)</h3>
+            <p>Softwares em segundo plano são a causa nº 1 de lentidão após ligar o sistema.</p>
+            <ul>
+              <li><strong>Aplicativos de Inicialização:</strong> No Gerenciador de Tarefas, aba "Aplicativos de inicialização", desative programas pesados que não precisam abrir com o Windows (ex.: Spotify, Steam, Discord, Teams).</li>
+              <li><strong>Serviços de Terceiros:</strong> Execute <code>msconfig</code>, vá em "Serviços", marque obrigatoriamente <strong>"Ocultar todos os serviços Microsoft"</strong> e desative atualizadores desnecessários (ex.: Adobe, Google Update).</li>
+            </ul>
+          </article>
+
+          <article class="step-card">
+            <div class="step-number">Etapa 03 — Limpeza de Arquivos Residuais</div>
+            <h3>Liberação de Espaço e Arquivos Temporários</h3>
+            <p>Remova gigabytes de lixo eletrônico que sobrecarregam o índice de busca e o disco.</p>
+            <ul>
+              <li><strong>Pastas Temporárias:</strong> Acesse via <code>Win + R</code> as pastas <code>%temp%</code>, <code>temp</code> e <code>prefetch</code> e elimine os dados antigos.</li>
+              <li><strong>Limpeza de Disco Integrada:</strong> Execute <code>cleanmgr</code> como administrador para remover itens da lixeira, relatórios de erro e cópias antigas do Windows Update.</li>
+            </ul>
+          </article>
+
+          <article class="step-card">
+            <div class="step-number">Etapa 04 — Integridade do Sistema</div>
+            <h3>Verificação e Correção de Sistema Corrompido</h3>
+            <p>Garanta que o sistema operacional está estável antes de finalizar o atendimento.</p>
+            <ul>
+              <li><strong>Reparo de Imagem:</strong> Se houver falhas recorrentes, rode <code>dism /online /cleanup-image /restorehealth</code> no CMD como administrador.</li>
+              <li><strong>Verificação de Integridade:</strong> Execute <code>sfc /scannow</code> no CMD como administrador para corrigir DLLs e arquivos danificados.</li>
+              <li><strong>Rede e Navegação:</strong> Execute <code>ipconfig /flushdns</code> para limpar o cache DNS e evitar lentidão no navegador.</li>
+            </ul>
+          </article>
+
+          <article class="step-card">
+            <div class="step-number">Etapa 05 — Validação &amp; Encerramento</div>
+            <h3>Reboot e Teste Final</h3>
+            <p>Confirme a melhoria e entregue a máquina pronta ao cliente.</p>
+            <ul>
+              <li><strong>Reinicialização Completa:</strong> Reinicie o sistema para consolidar os arquivos reparados e as alterações feitas.</li>
+              <li><strong>Validação dos Resultados:</strong> Abra o Gerenciador de Tarefas e confirme se o uso de CPU, RAM e Disco baixou em repouso.</li>
+              <li><strong>Relatório ao Cliente:</strong> Informe brevemente as ações realizadas (arquivos limpos, inicialização otimizada e correções de sistema).</li>
+            </ul>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Técnico Henrique — Suporte Técnico e Manutenção Remota de Computadores.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
