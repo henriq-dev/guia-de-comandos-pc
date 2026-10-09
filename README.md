@@ -1,2 +1,2 @@
-# guia-de-comandos-ptimização-de-pc
+# guia-de-comandos-ptimização-de-pc https://guia-de-comandos-pc.vercel.app/
 O site do Técnico Henrique é uma plataforma web moderna em Dark Mode com estética neon, projetada especialmente para agilizar o suporte técnico remoto. Ele funciona como um guia prático e interativo que reúne os principais comandos do Prompt de Comando (CMD) e do Executar (Win+R) para limpeza, otimização e manutenção do Windows.  Com barra de pesquisa em tempo real, categorias organizadas e botões para copiar os comandos em um clique, o site traz explicações diretas e orientações de uso para garantir atendimentos rápidos, profissionais e eficientes.
