@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ÂNCORA: base global — fundo escuro com brilho sutil no topo */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-ink-900 font-sans text-slate-200 antialiased;
+    background-image:
+      radial-gradient(ellipse 70% 40% at 50% -10%, rgba(0, 240, 255, 0.10), transparent 70%),
+      radial-gradient(ellipse 40% 30% at 100% 30%, rgba(0, 255, 136, 0.04), transparent 70%);
+    background-attachment: fixed;
+  }
+
+  :focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-neon;
+  }
+
+  ::selection {
+    @apply bg-neon text-black;
+  }
+}
+
+@layer components {
+  /* ÂNCORA: lâmina da katana — traço inclinado usado como detalhe de marca */
+  .blade {
+    @apply block h-[3px] -skew-x-[35deg] rounded-sm bg-gradient-to-r from-neon to-transparent shadow-neon;
+  }
+
+  /* ÂNCORA: card de vidro fosco */
+  .glass {
+    @apply border border-white/10 bg-white/[0.03] backdrop-blur-md;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

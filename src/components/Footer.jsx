@@ -1,0 +1,7 @@
+export default function Footer() {
+  return (
+    <footer className="border-t border-white/10 px-4 py-6 text-center text-sm text-muted">
+      <p>&copy; 2026 Técnico Henrique — Suporte Técnico e Manutenção Remota de Computadores.</p>
+    </footer>
+  )
+}

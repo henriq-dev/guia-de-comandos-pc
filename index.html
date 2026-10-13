@@ -1,79 +1,18 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ANARCO.EXE 3D — hackeie, vaze, resista</title>
-<meta name="description" content="Jogo 3D no navegador: invada torres corporativas, fuja dos drones e vaze os segredos que elas escondem. Tudo é ficção.">
-<meta name="theme-color" content="#09090b">
-<meta name="color-scheme" content="dark">
-
-<!-- ÂNCORA: ícones (favicon.ico = navegadores antigos, svg = modernos, png = iPhone/Android) -->
-<link rel="icon" href="favicon.ico" sizes="any">
-<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
-<link rel="apple-touch-icon" href="assets/img/icone-180.png">
-
-<!-- ÂNCORA: preview ao compartilhar o link (WhatsApp, Telegram, Discord). Os apps exigem URL completa;
-     se o domínio mudar, troque og:url, og:image e twitter:image. -->
-<meta property="og:type" content="website">
-<meta property="og:locale" content="pt_BR">
-<meta property="og:site_name" content="ANARCO.EXE 3D">
-<meta property="og:title" content="ANARCO.EXE 3D — hackeie, vaze, resista">
-<meta property="og:description" content="Invada torres corporativas, fuja dos drones e vaze os segredos que elas escondem. Jogue no navegador.">
-<meta property="og:url" content="https://anarcoexe.vercel.app/">
-<meta property="og:image" content="https://anarcoexe.vercel.app/assets/img/og-preview.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Arte do jogo ANARCO.EXE 3D: cidade neon com o título do jogo">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://anarcoexe.vercel.app/assets/img/og-preview.jpg">
-<link rel="stylesheet" href="assets/fonts/fonts.css">
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<canvas id="rain"></canvas>
-<div id="hud">
-  <h1>ANARCO<span>.EXE</span> 3D</h1>
-  <div class="b" id="lv">NÍVEL 1/5</div>
-  <div class="b" id="tm" aria-label="Tempo da corrida">TEMPO <span id="tmv">00:00.0</span></div>
-  <div class="b"><img id="ic_d" alt="">TORRES <span id="cnt">0/3</span></div>
-  <div class="b"><img id="ic_h" alt="">HACK<i><u id="hk"></u></i></div>
-  <div class="b r"><img id="ic_a" alt="">ALERTA<i><u id="al"></u></i></div>
-  <div class="b" id="bb" hidden><span id="bn">CHEFÃO</span><i><u id="bh"></u></i></div>
-</div>
-<div id="msg"></div>
-<div id="leakcard" hidden><b>VAZAMENTO CAPTURADO</b><span id="lcc"></span><small id="lcd"></small></div>
-<div id="obj"></div>
-<button id="pb" aria-label="Pausar">⏸</button>
-<div id="pz" hidden><div><h2>PAUS<span>A</span></h2><p>P ou Esc para voltar.</p><button id="pzc">Continuar</button> <button id="pzm">Menu</button></div></div>
-<div id="bf" hidden><div><h2 id="bfh"></h2><p id="bft"></p></div></div>
-<div id="mini" hidden><b>BREACH — digite a sequência</b><div id="seq"></div><div class="mb"><u id="mt"></u></div><div id="mk"></div></div>
-<div id="tut" hidden><span id="tutx"></span><button id="tuts">pular</button></div>
-<div id="lk" hidden><div><h2>VAZAMENTOS <span>COLETADOS</span></h2><p id="lkc"></p><ul id="lkl"></ul>
-  <button id="lkx">Fechar</button> <button id="lkz">Apagar tudo</button></div></div>
-<div id="rk" hidden><div><h2>MELHORES <span>TEMPOS</span></h2><p id="rkc"></p><ul id="rkl"></ul>
-  <button id="rkx">Fechar</button> <button id="rkz">Apagar</button></div></div>
-<canvas id="map" width="130" height="130" aria-label="Minimapa"></canvas>
-<button id="snd" aria-label="Som">🔊</button>
-<button id="bz">BREACH · Espaço</button>
-<button id="rn" type="button" aria-label="Segurar para correr">CORRER</button>
-<div id="joy"><b id="nub"></b></div>
-<div id="ov"><div>
-  <h2 id="ot">ANARCO<span>.EXE</span></h2>
-  <p id="od">Você é o capuz sem chefe. Chegue perto de cada torre corporativa e fique no círculo vermelho até o hack completar. Fuja das luzes dos drones: se o alerta encher, o rastreio te acha.</p>
-  <p>Mova com WASD ou setas, segure Shift para correr (faz barulho!). No celular, use o joystick e segure o botão CORRER. Ao completar o hack, digite a sequência de setas. Pegue energia, keycard e USB. Tudo é ficção.</p>
-  <p id="rkres" hidden></p>
-  <div id="ch" class="mb2" hidden><button id="cCaos">VAZAR TUDO</button><button id="cSomb">CHANTAGEAR</button></div>
-  <button id="st">Invadir</button>
-  <div class="mb2"><button id="tb">Tutorial</button><button id="lb">Vazamentos</button><button id="rb">Ranking</button></div>
-</div></div>
-
-
-<!-- Three.js local: o jogo roda 100% offline -->
-<script src="assets/lib/three.min.js"></script>
-<!-- ÂNCORA: caminhos das imagens (manifesto). O modelo 3D vem de assets/models/anarco.bin -->
-<script src="assets/dados/manifesto.js"></script>
-<!-- ÂNCORA: lógica do jogo -->
-<script src="script.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0c10" />
+    <meta name="description" content="Guia prático de comandos CMD e Executar e roteiro de atendimento remoto para manutenção e otimização do Windows." />
+    <title>Técnico Henrique | Guia de Comandos &amp; Roteiro de Atendimento</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230a0c10'/%3E%3Cpath d='M8 10l7 6-7 6M17 22h8' fill='none' stroke='%2300f0ff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
