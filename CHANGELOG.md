@@ -1,5 +1,11 @@
 # Histórico de versões
 
+## 2.9.6 — CHKDSK separado para HD e SSD
+- Novo card `chkdsk C: /f` para SSD. O card do HD (`/f /r`) agora indica no título e na descrição que é só para HD mecânico, para ninguém copiar o `/r` por engano num SSD.
+
+## 2.9.5 — Correção de texto
+- Winsock: removida a frase que mandava combinar com `flushdns` e contradizia a orientação de usar só depois de `flushdns` e `renew`.
+
 ## 2.9.4 — Explicações mais completas no Roteiro (só conteúdo)
 - 22 itens do Roteiro ganharam contexto sem perder o texto anterior: triagem (o que observar em repouso), inicialização (o que manter ativo), DNS, testes de internet (como interpretar o ping e o cabo), tela azul (como ler o código e o Visualizador de Eventos, reverter driver) e encerramento (reiniciar em vez de desligar, comparar com a triagem, orientar o cliente).
 - Roteador: aviso para não usar o botão de reset.

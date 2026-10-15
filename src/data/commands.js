@@ -101,10 +101,20 @@ export const commands = [
     id: 'chkdsk',
     type: 'cmd',
     icon: Activity,
-    title: 'Verificar Erros no Disco',
-    description: 'Corrige erros no sistema de arquivos (NTFS) com /f e, com /r, também varre a superfície atrás de setores defeituosos.',
+    title: 'Verificar Erros no Disco (HD)',
+    description: 'Corrige erros no sistema de arquivos (NTFS) e varre a superfície atrás de setores defeituosos. Só para HD mecânico.',
     code: 'chkdsk C: /f /r',
-    guide: 'Antes, confira o S.M.A.R.T. no CrystalDiskInfo: em Alerta ou Crítico, não rode e faça backup. Use /r só em HD mecânico saudável; em SSD use apenas chkdsk C: /f. Execute como Administrador e aceite agendar para o próximo reinício. Em HD pode demorar bastante.',
+    guide: 'Antes, confira o S.M.A.R.T. no CrystalDiskInfo: em Alerta ou Crítico, não rode e faça backup imediato. Use só em HD mecânico saudável; em SSD use o card seguinte, sem o /r. Execute como Administrador e aceite agendar para o próximo reinício. Pode demorar bastante.',
+    categories: ['cmd', 'otimizacao']
+  },
+  {
+    id: 'chkdsk-ssd',
+    type: 'cmd',
+    icon: Activity,
+    title: 'Verificar Erros no Disco (SSD)',
+    description: 'Corrige erros no sistema de arquivos (NTFS) sem a varredura de superfície, que gasta o SSD sem nenhum benefício.',
+    code: 'chkdsk C: /f',
+    guide: 'Confira o S.M.A.R.T. no CrystalDiskInfo antes: em Alerta ou Crítico, faça backup e não rode. Execute como Administrador e aceite agendar para o próximo reinício. Não use /r em SSD. Se o disco continuar com problemas, use a ferramenta de diagnóstico do fabricante.',
     categories: ['cmd', 'otimizacao']
   },
   {
@@ -114,7 +124,7 @@ export const commands = [
     title: 'Redefinir Rede (Winsock)',
     description: 'Restaura o catálogo Winsock ao padrão, resolvendo falhas de conexão causadas por softwares ou malwares.',
     code: 'netsh winsock reset',
-    guide: 'Execute como Administrador e reinicie o computador em seguida. Combine com ipconfig /flushdns quando o cliente relatar internet instável. Use só depois que ipconfig /flushdns e ipconfig /renew não resolverem. O reset pode remover configurações de VPN e de alguns antivírus que se encaixam na rede: avise o cliente, pois podem precisar ser reconfigurados.',
+    guide: 'Execute como Administrador e reinicie o computador em seguida. Use só depois que ipconfig /flushdns e ipconfig /renew não resolverem a internet instável. O reset pode remover configurações de VPN e de alguns antivírus que se encaixam na rede: avise o cliente, pois podem precisar ser reconfigurados.',
     categories: ['cmd', 'otimizacao']
   },
   {
