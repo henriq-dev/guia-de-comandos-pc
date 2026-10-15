@@ -27,10 +27,9 @@ src/
 ├── utils/               ← regras puras: report.js, history.js, validators.js
 ├── App.jsx              ← estados globais (busca, página, favoritos, checklist, histórico)
 ├── main.jsx             ← ponto de entrada
-└── index.css            ← Tailwind + estilos base
+└── index.css            ← Tailwind 4 + tema (cores, fontes, brilho) + estilos base
 public/                  ← manifest, service worker (sw.js), ícones, cabeçalhos de cache
 tests/                   ← unit/ (npm test) e e2e/ (npm run test:e2e)
-tailwind.config.js       ← cores e fontes do tema (dark + neon)
 ```
 
 ## Como adicionar um comando novo
@@ -80,7 +79,7 @@ Abra `src/data/commands.js` e inclua um objeto na lista:
 
 - **Checklist compartilhado entre rotas:** etapas com o mesmo id (ex.: `p0`, `s1`) aparecem marcadas em todas as rotas que as usam. É intencional.
 - **Dados no navegador:** tudo fica no `localStorage` deste navegador, inclusive nome do cliente e equipamento no histórico. Não use em perfil compartilhado.
-- **Dependências:** `npm audit` mostra 5 avisos só em ferramentas de desenvolvimento (`braces` dentro do Tailwind 3); produção tem 0. Só o Tailwind 4 resolve, e é uma migração própria. Evite `npm audit fix --force` sem testar. Requer Node 18 ou superior.
+- **Dependências:** `npm audit` está em 0 avisos (produção e desenvolvimento) desde o Tailwind 4. O tema (cores, fontes, brilho neon) fica no bloco `@theme` de `src/index.css`; não existe mais `tailwind.config.js`. Requer Node 20 ou superior. Evite `npm audit fix --force` sem testar.
 
 ## Testes
 

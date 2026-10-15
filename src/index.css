@@ -1,6 +1,21 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+/* ÂNCORA: o tema da Katana Tech fica aqui — mude a cor uma vez e vale para o site todo */
+@theme {
+  --color-ink-950: #07090d;
+  --color-ink-900: #0a0c10;
+  --color-ink-800: #12161f;
+  --color-ink-700: #1a202c;
+  --color-ink-600: #1e293b;
+  --color-neon: #00f0ff;
+  --color-jade: #00ff88;
+  --color-amber: #ff9900;
+  --color-muted: #94a3b8;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'Fira Code', ui-monospace, monospace;
+  --shadow-neon: 0 0 18px #00f0ff; /* mesma intensidade da versão com Tailwind 3 */
+  --shadow-jade: 0 0 14px #00ff88;
+}
 
 /* ÂNCORA: base global — fundo escuro com brilho sutil no topo */
 @layer base {
@@ -8,12 +23,10 @@
     scroll-behavior: smooth;
   }
 
-  body {
-    @apply bg-ink-900 font-sans text-slate-200 antialiased;
-    background-image:
-      radial-gradient(ellipse 70% 40% at 50% -10%, rgba(0, 240, 255, 0.10), transparent 70%),
-      radial-gradient(ellipse 40% 30% at 100% 30%, rgba(0, 255, 136, 0.04), transparent 70%);
-    background-attachment: fixed;
+  /* Tailwind 4 deixou os botões com cursor padrão: devolve a mãozinha */
+  button:not(:disabled),
+  summary {
+    cursor: pointer;
   }
 
   :focus-visible {
@@ -23,6 +36,20 @@
   ::selection {
     @apply bg-neon text-black;
   }
+}
+
+/* ÂNCORA: fora de @layer de propósito. No Tailwind 4 o que está em @layer perde para CSS "solto" de
+   quem hospeda a página (ex.: o preview do Claude pintava o fundo de branco). Assim o fundo escuro sempre vale. */
+html body {
+  background-color: var(--color-ink-900);
+  color: var(--color-slate-200);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-image:
+    radial-gradient(ellipse 70% 40% at 50% -10%, rgba(0, 240, 255, 0.1), transparent 70%),
+    radial-gradient(ellipse 40% 30% at 100% 30%, rgba(0, 255, 136, 0.04), transparent 70%);
+  background-attachment: fixed;
 }
 
 @layer components {

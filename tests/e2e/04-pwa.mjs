@@ -53,8 +53,8 @@ await ctx.setOffline(true)
 await page.reload()
 await page.waitForSelector('main article', { timeout: 8000 })
 const n = await page.locator('main article').count()
-ok(n === 13, 'offline mostra 13 cards: ' + n)
-ok(await page.getByText('Sem internet').isVisible(), 'aviso offline visível')
+ok(n === 14, 'offline mostra 14 cards: ' + n)
+ok(await page.getByText('Sem internet — tudo continua').isVisible(), 'aviso offline visível')
 
 // 4) atalho ?aba=roteiro offline
 await page.goto(URL1 + '?aba=roteiro')
@@ -71,7 +71,7 @@ ok(!page.url().includes('aba='), 'aba inválida limpa da URL')
 // 5) volta online: aviso some
 await ctx.setOffline(false)
 await sleep(300)
-ok(!(await page.getByText('Sem internet').isVisible().catch(() => false)), 'aviso offline some ao voltar')
+ok(!(await page.getByText('Sem internet — tudo continua').isVisible().catch(() => false)), 'aviso offline some ao voltar')
 
 // 6) convite de instalação
 await page.evaluate(() => {

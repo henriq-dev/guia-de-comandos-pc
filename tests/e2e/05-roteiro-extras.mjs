@@ -17,7 +17,7 @@ const sfc=p.locator('li',{hasText:'Verificação de Integridade'}).getByRole('bu
 await sfc.click(); await p.waitForTimeout(700)
 ok(await p.locator('input[type=search], input').first().inputValue()==='sfc','busca preenchida com sfc')
 const n=await p.locator('main article').count()
-ok(n>=1 && n<13,'guia filtrado: '+n)
+ok(n>=1 && n<14,'guia filtrado: '+n)
 ok(await p.locator('main article').first().textContent().then(t=>/sfc/i.test(t)),'card do SFC aparece')
 // alvos de toque
 const m=await (await b.newContext({viewport:{width:390,height:800},hasTouch:true,isMobile:true})).newPage()

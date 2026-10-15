@@ -1,5 +1,15 @@
 # Histórico de versões
 
+## 2.10.1 — Fundo escuro garantido
+- No preview do Claude a página aparecia com fundo branco depois do Tailwind 4: o Tailwind 4 coloca o CSS base em camadas (`@layer`), e CSS "solto" de quem hospeda a página vence as camadas. O fundo e a cor do texto do `body` agora ficam fora de `@layer`, então valem em qualquer hospedagem. Testado com uma página que força fundo branco.
+
+## 2.10.0 — Tailwind 4 (zera os avisos de segurança)
+- Tailwind 3.4 → 4.3 com o plugin oficial para Vite. `npm audit`: de 5 avisos para **0**, em produção e desenvolvimento.
+- O tema (cores, fontes, brilho) foi para o bloco `@theme` em `src/index.css`. Saíram `tailwind.config.js`, `postcss.config.js` e o `autoprefixer`.
+- Visual conferido tela por tela (390px e 1280px; Guia, Roteiro e Histórico) contra a versão anterior: sem diferença visível. Dois ajustes para manter o visual: o brilho neon voltou à intensidade antiga e os botões continuam com cursor de mãozinha (o Tailwind 4 mudou esse padrão).
+- Requer Node 20 ou superior (antes: 18).
+- Testes: `npm test` e `npm run test:e2e` passam. Os testes passaram a esperar 14 cards no Guia (CHKDSK de SSD da v2.9.6).
+
 ## 2.9.6 — CHKDSK separado para HD e SSD
 - Novo card `chkdsk C: /f` para SSD. O card do HD (`/f /r`) agora indica no título e na descrição que é só para HD mecânico, para ninguém copiar o `/r` por engano num SSD.
 

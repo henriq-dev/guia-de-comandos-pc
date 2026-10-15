@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto'
 import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 
 const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf-8'))
 
@@ -32,7 +33,7 @@ function serviceWorkerVersion() {
 // base './' deixa os caminhos relativos (funciona na Vercel, Netlify e em subpastas)
 // __APP_VERSION__ vira a versão do package.json e aparece no rodapé do site
 export default defineConfig({
-  plugins: [react(), serviceWorkerVersion()],
+  plugins: [react(), tailwindcss(), serviceWorkerVersion()],
   base: './',
   define: { __APP_VERSION__: JSON.stringify(pkg.version) }
 })

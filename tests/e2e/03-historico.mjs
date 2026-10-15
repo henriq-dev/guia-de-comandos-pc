@@ -98,7 +98,7 @@ ok(!(await tab(2).textContent()).match(/\d/), 'contador some da aba')
 // dado corrompido não quebra
 await p.evaluate(() => { localStorage.setItem('katana-history', JSON.stringify('abc')); localStorage.setItem('katana-page', JSON.stringify('xyz')) })
 await p.reload({ waitUntil: 'load' }); await p.waitForTimeout(900)
-ok(await p.locator('.cmd-card').count() === 13, 'página salva inválida cai em Comandos')
+ok(await p.locator('.cmd-card').count() === 14, 'página salva inválida cai em Comandos')
 await tab(2).click(); await p.waitForTimeout(500)
 ok(await p.getByText('Nenhum atendimento salvo ainda').count() === 1, 'histórico corrompido vira lista vazia')
 
