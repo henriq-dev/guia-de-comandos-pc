@@ -1,5 +1,13 @@
 # Histórico de versões
 
+## 2.9.2 — Textos de segurança técnica (só conteúdo)
+- Ponto de restauração: deixa claro que não é backup de Documentos, Fotos e Downloads e que não resolve erro de NTFS nem defeito físico do disco.
+- CrystalDiskInfo passa a ser obrigatório antes do CHKDSK. Em Alerta ou Crítico, não rodar e fazer backup. `/r` só em HD mecânico saudável; em SSD, apenas `/f`.
+- DISM: aguardar 100%, rodar antes do SFC e, sem internet, usar ISO do Windows como origem (`/source`). SFC: indica onde fica o registro (CBS.log).
+- Prefetch: não limpar de rotina (deixa os programas lentos até o Windows refazer o mapa). Só após malware ou falha específica.
+- Cleanmgr: desmarcar "Downloads" e só remover Windows.old se não houver necessidade de rollback.
+- MSConfig: alerta para nunca usar "Desativar tudo" sem ocultar serviços Microsoft e para não limitar processadores (INACCESSIBLE_BOOT_DEVICE).
+
 ## 2.9.1 — Ajuste fino do aviso no celular
 - O espaço reservado no fim da página agora acompanha os avisos visíveis (só "Sem internet" usa uma faixa baixa; instalar e atualizar usam mais). Antes sempre reservava 9rem.
 

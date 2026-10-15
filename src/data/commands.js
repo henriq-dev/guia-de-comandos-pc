@@ -12,9 +12,9 @@ export const commands = [
     type: 'cmd',
     icon: ShieldCheck,
     title: 'Reparação de Arquivos de Sistema',
-    description: 'Varre todos os arquivos protegidos do Windows e substitui as cópias corrompidas pelas originais em cache.',
+    description: 'Compara os arquivos protegidos do Windows com a cópia local (pasta WinSxS) e substitui os corrompidos.',
     code: 'sfc /scannow',
-    guide: 'Execute sempre no Prompt de Comando como Administrador. Se indicar "reparo pendente", reinicie o computador antes de tentar novamente.',
+    guide: 'Execute no Prompt de Comando como Administrador, depois do DISM: se a cópia local estiver danificada, o SFC não consegue reparar. O registro fica em %WinDir%\\Logs\\CBS\\CBS.log. Se indicar "reparo pendente", reinicie antes de tentar novamente.',
     categories: ['cmd', 'limpeza']
   },
   {
@@ -22,9 +22,9 @@ export const commands = [
     type: 'cmd',
     icon: Wrench,
     title: 'Reparo de Imagem do Windows (DISM)',
-    description: 'Restaura a imagem base dos componentes do Windows usando o Windows Update. É a base que o SFC usa para reparar: rode o DISM primeiro.',
+    description: 'Repara o repositório de componentes do Windows (WinSxS) baixando arquivos íntegros do Windows Update. É a base que o SFC usa para reparar: rode o DISM primeiro.',
     code: 'dism /online /cleanup-image /restorehealth',
-    guide: 'Requer conexão com a Internet. Execute antes do sfc /scannow: se a imagem estiver danificada, o SFC não consegue reparar os arquivos.',
+    guide: 'Requer conexão com a Internet e deve rodar antes do sfc /scannow. Sem internet ou com o Windows Update quebrado, monte uma ISO do Windows e use: dism /online /cleanup-image /restorehealth /source:wim:D:\\sources\\install.wim:1 /limitaccess (troque D: pela letra da ISO; o número final é a edição do Windows).',
     categories: ['cmd', 'otimizacao']
   },
   {
@@ -34,7 +34,7 @@ export const commands = [
     title: 'Remover Fila de Reparos Pendentes',
     description: 'Cancela atualizações e operações de reparo pendentes que bloqueiam outros utilitários de diagnóstico.',
     code: 'dism /online /cleanup-image /revertpendingactions',
-    guide: 'Útil quando o computador fica preso em "reparo de sistema pendente" após atualizações interrompidas. Reinicie em seguida.',
+    guide: 'Use só quando o computador ficar preso em "reparo de sistema pendente" após atualizações interrompidas. Reinicie em seguida.',
     categories: ['cmd', 'limpeza']
   },
   {
@@ -44,7 +44,7 @@ export const commands = [
     title: 'Arquivos Temporários do Usuário',
     description: 'Abre a pasta com os arquivos temporários gerados pelos aplicativos da conta atual.',
     code: '%temp%',
-    guide: 'Pressione Ctrl + A para selecionar tudo e Shift + Delete para apagar de forma permanente. Ignore arquivos em uso.',
+    guide: 'Pressione Ctrl + A para selecionar tudo e Shift + Delete para apagar de forma permanente. Ignore arquivos em uso. Confira que está na pasta temporária antes de apagar.',
     categories: ['run', 'limpeza']
   },
   {
@@ -62,9 +62,9 @@ export const commands = [
     type: 'run',
     icon: Zap,
     title: 'Cache de Pré-carregamento (Prefetch)',
-    description: 'Armazena dados de inicialização de aplicativos. Limpar ajuda quando há erros na execução de softwares.',
+    description: 'Guarda um mapa de pré-carregamento dos programas mais usados para que abram mais rápido.',
     code: 'prefetch',
-    guide: 'Requer permissão de administrador ao abrir. Pode apagar todo o conteúdo com segurança.',
+    guide: 'Não limpe de rotina: apagar deixa os programas mais lentos nas primeiras aberturas, até o Windows refazer o mapa. Limpe só após remover malware ou se um programa específico falhar ao iniciar. Requer permissão de administrador.',
     categories: ['run', 'limpeza']
   },
   {
@@ -72,9 +72,9 @@ export const commands = [
     type: 'run',
     icon: HardDrive,
     title: 'Limpeza de Disco Avançada',
-    description: 'Abre o assistente nativo do Windows para remover atualizações antigas, dumps de memória e lixeira.',
+    description: 'Abre o assistente nativo do Windows para remover arquivos temporários, relatórios de erro, atualizações antigas e lixeira.',
     code: 'cleanmgr',
-    guide: 'Clique em "Limpar arquivos do sistema" dentro da ferramenta para remover gigabytes de atualizações antigas do Windows.',
+    guide: 'Desmarque "Downloads" se aparecer na lista (são arquivos do cliente). Em "Limpar arquivos do sistema", só remova atualizações antigas e Windows.old se o sistema estiver estável e o cliente não precisar voltar à versão anterior.',
     categories: ['run', 'limpeza']
   },
   {
@@ -94,7 +94,7 @@ export const commands = [
     title: 'Configuração do Sistema (MSConfig)',
     description: 'Acessa as definições de inicialização, serviços e opções de boot do sistema.',
     code: 'msconfig',
-    guide: 'Na aba "Serviços", marque "Ocultar todos os serviços Microsoft" antes de desativar qualquer item desnecessário.',
+    guide: 'Na aba "Serviços", marque "Ocultar todos os serviços Microsoft" antes de desativar qualquer item: sem isso, "Desativar tudo" derruba drivers de teclado, rede e login e o PC pode não iniciar. Não limite o número de processadores em "Inicialização" > "Opções avançadas" (risco de tela azul).',
     categories: ['run', 'otimizacao']
   },
   {
@@ -102,9 +102,9 @@ export const commands = [
     type: 'cmd',
     icon: Activity,
     title: 'Verificar Erros no Disco',
-    description: 'Procura e corrige erros lógicos e setores defeituosos no disco do sistema.',
+    description: 'Corrige erros no sistema de arquivos (NTFS) com /f e, com /r, também varre a superfície atrás de setores defeituosos.',
     code: 'chkdsk C: /f /r',
-    guide: 'Execute como Administrador. Como o disco C: está em uso, o Windows pede para agendar a verificação no próximo reinício. Em HD mecânico pode demorar bastante.',
+    guide: 'Antes, confira o S.M.A.R.T. no CrystalDiskInfo: em Alerta ou Crítico, não rode e faça backup. Use /r só em HD mecânico saudável; em SSD use apenas chkdsk C: /f. Execute como Administrador e aceite agendar para o próximo reinício. Em HD pode demorar bastante.',
     categories: ['cmd', 'otimizacao']
   },
   {

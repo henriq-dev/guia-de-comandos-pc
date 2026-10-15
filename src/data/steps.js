@@ -11,12 +11,12 @@ export const allSteps = [
     minutes: 3,
     phase: 'Segurança',
     title: 'Ponto de Restauração e Aviso ao Cliente',
-    intro: 'Crie um caminho de volta antes de alterar qualquer coisa. Se algo der errado, o sistema pode ser desfeito.',
+    intro: 'Crie um caminho de volta antes de alterar qualquer coisa. O ponto de restauração desfaz mudanças do sistema, mas não é backup dos arquivos do cliente.',
     items: [
-      { id: 'p0-restauracao', lead: 'Criar Ponto de Restauração:', text: 'Abra o PowerShell como administrador e execute `Checkpoint-Computer -Description "Antes do atendimento" -RestorePointType MODIFY_SETTINGS`. Se der erro de proteção desativada, abra `SystemPropertiesProtection`, ative a proteção do disco (C:) e repita.', report: 'Criação de ponto de restauração antes das alterações' },
-      { id: 'p0-aviso', lead: 'Avisar sobre Arquivos Importantes:', text: 'Pergunte ao cliente se há arquivos importantes sem cópia (Documentos, Área de Trabalho, Downloads) e combine o que fazer antes de continuar.', report: null }
+      { id: 'p0-restauracao', lead: 'Criar Ponto de Restauração:', text: 'Abra o PowerShell como administrador e execute `Checkpoint-Computer -Description "Antes do atendimento" -RestorePointType MODIFY_SETTINGS`. Se a Proteção do Sistema estiver desativada, o comando falha e nada é criado: abra `SystemPropertiesProtection`, ative a proteção do disco (C:) e repita.', report: 'Criação de ponto de restauração antes das alterações' },
+      { id: 'p0-aviso', lead: 'Avisar sobre Arquivos Importantes:', text: 'Explique ao cliente que o ponto de restauração não salva Documentos, Fotos nem Downloads. Pergunte se há arquivos importantes sem cópia (inclusive na Área de Trabalho) e combine o backup antes de continuar.', report: null }
     ],
-    tip: 'O Windows limita a 1 ponto de restauração a cada 24 horas por padrão. Se o comando avisar isso, já existe um recente e você pode seguir.'
+    tip: 'O Windows limita a 1 ponto de restauração a cada 24 horas por padrão. Se o comando avisar isso, já existe um recente e você pode seguir. O ponto de restauração não resolve erro no sistema de arquivos (NTFS) nem defeito físico do disco.'
   },
   // ===== Manutenção geral e lentidão =====
   {
@@ -26,9 +26,9 @@ export const allSteps = [
     title: 'Triagem Inicial & Diagnóstico do Hardware',
     intro: 'Antes de alterar qualquer configuração de software, entenda o estado do hardware da máquina do cliente.',
     items: [
-      { id: 's1-armazenamento', lead: 'Verificar Armazenamento:', text: 'Confira em "Este Computador" se o disco (C:) é SSD ou HD mecânico e o espaço livre (menos de 10% livre causa lentidão extrema).', report: 'Verificação do disco e do espaço livre' },
+      { id: 's1-armazenamento', lead: 'Verificar Armazenamento:', text: 'Confira em "Este Computador" se o disco (C:) é SSD ou HD mecânico (isso muda como verificar o disco depois) e o espaço livre (menos de 10% livre causa lentidão extrema).', report: 'Verificação do disco e do espaço livre' },
       { id: 's1-ram-cpu', guide: 'taskmgr', lead: 'Verificar Memória RAM & CPU:', text: 'Abra o Gerenciador de Tarefas com `Ctrl + Shift + Esc` e analise o uso de CPU, RAM e Disco em repouso.', report: 'Análise do uso de processador, memória e disco' },
-      { id: 's1-smart', lead: 'Saúde do Disco (S.M.A.R.T.):', text: 'Se o disco estiver em 100% constante, verifique a saúde com uma ferramenta leve como o CrystalDiskInfo. Não adianta otimizar o software se o disco estiver danificado.', report: 'Verificação da saúde do disco (S.M.A.R.T.)' }
+      { id: 's1-smart', lead: 'Saúde do Disco (S.M.A.R.T.):', text: 'Verifique a saúde do disco com o CrystalDiskInfo antes de qualquer verificação profunda (obrigatório antes do CHKDSK). Se o status for Alerta (amarelo) ou Crítico (vermelho), pare, faça backup imediato dos dados do cliente e não rode o CHKDSK. Não adianta otimizar o software se o disco estiver danificado.', report: 'Verificação da saúde do disco (S.M.A.R.T.)' }
     ],
     tip: 'Se o cliente usa HD mecânico como disco do sistema, recomende a migração para SSD como prioridade máxima de upgrade.'
   },
@@ -40,8 +40,9 @@ export const allSteps = [
     intro: 'Softwares em segundo plano são a causa nº 1 de lentidão após ligar o sistema.',
     items: [
       { id: 's2-apps', lead: 'Aplicativos de Inicialização:', text: 'No Gerenciador de Tarefas, aba "Aplicativos de inicialização", desative programas pesados que não precisam abrir com o Windows (ex.: Spotify, Steam, Discord, Teams).', report: 'Desativação de programas desnecessários na inicialização' },
-      { id: 's2-servicos', guide: 'msconfig', lead: 'Serviços de Terceiros:', text: 'Execute `msconfig`, vá em "Serviços", marque obrigatoriamente "Ocultar todos os serviços Microsoft" e desative atualizadores desnecessários (ex.: Adobe, Google Update).', report: 'Revisão dos serviços de terceiros na inicialização' }
-    ]
+      { id: 's2-servicos', guide: 'msconfig', lead: 'Serviços de Terceiros:', text: 'Execute `msconfig`, vá em "Serviços", marque obrigatoriamente "Ocultar todos os serviços Microsoft" e desative apenas atualizadores desnecessários (ex.: Adobe, Google Update). Nunca use "Desativar tudo" sem ocultar os serviços Microsoft.', report: 'Revisão dos serviços de terceiros na inicialização' }
+    ],
+    tip: 'Não mexa em "Inicialização" > "Opções avançadas" para limitar o número de processadores: isso não acelera nada e pode causar tela azul (INACCESSIBLE_BOOT_DEVICE).'
   },
   {
     id: 's3',
@@ -50,8 +51,8 @@ export const allSteps = [
     title: 'Liberação de Espaço e Arquivos Temporários',
     intro: 'Remova gigabytes de lixo eletrônico que sobrecarregam o índice de busca e o disco.',
     items: [
-      { id: 's3-pastas', guide: 'temp', lead: 'Pastas Temporárias:', text: 'Acesse via `Win + R` as pastas `%temp%`, `temp` e `prefetch` e elimine os dados antigos.', report: 'Limpeza de arquivos temporários' },
-      { id: 's3-cleanmgr', guide: 'cleanmgr', lead: 'Limpeza de Disco Integrada:', text: 'Execute `cleanmgr` como administrador para remover itens da lixeira, relatórios de erro e cópias antigas do Windows Update.', report: 'Limpeza de disco (lixeira, relatórios de erro e atualizações antigas)' }
+      { id: 's3-pastas', guide: 'temp', lead: 'Pastas Temporárias:', text: 'Acesse via `Win + R` as pastas `%temp%` e `temp` e elimine os dados antigos (ignore arquivos em uso). Não limpe a `prefetch` de rotina: o Windows usa essa pasta para abrir programas mais rápido e apagá-la deixa o computador mais lento por um tempo. Só limpe após remover malware ou se um programa específico falhar ao iniciar.', report: 'Limpeza de arquivos temporários' },
+      { id: 's3-cleanmgr', guide: 'cleanmgr', lead: 'Limpeza de Disco Integrada:', text: 'Execute `cleanmgr` como administrador para remover itens da lixeira e relatórios de erro. Desmarque "Downloads" se aparecer na lista, pois são arquivos do cliente. Só remova atualizações antigas e "Windows.old" se o sistema estiver estável e o cliente não precisar voltar à versão anterior do Windows.', report: 'Limpeza de disco (lixeira, relatórios de erro e atualizações antigas)' }
     ]
   },
   {
@@ -61,8 +62,8 @@ export const allSteps = [
     title: 'Verificação e Correção de Sistema Corrompido',
     intro: 'Garanta que o sistema operacional está estável antes de finalizar o atendimento.',
     items: [
-      { id: 's4-dism', guide: 'dism', lead: 'Reparo de Imagem:', text: 'Se houver falhas recorrentes, rode `dism /online /cleanup-image /restorehealth` no CMD como administrador.', report: 'Reparo da imagem do Windows (DISM)' },
-      { id: 's4-sfc', guide: 'sfc', lead: 'Verificação de Integridade:', text: 'Execute `sfc /scannow` no CMD como administrador para corrigir DLLs e arquivos danificados.', report: 'Verificação e reparo dos arquivos do sistema (SFC)' },
+      { id: 's4-dism', guide: 'dism', lead: 'Reparo de Imagem:', text: 'Se houver falhas recorrentes, rode `dism /online /cleanup-image /restorehealth` no CMD como administrador e aguarde chegar a 100% antes de seguir. Precisa de internet; sem ela, use uma ISO do Windows como origem (veja "Ver no Guia").', report: 'Reparo da imagem do Windows (DISM)' },
+      { id: 's4-sfc', guide: 'sfc', lead: 'Verificação de Integridade:', text: 'Depois do DISM, execute `sfc /scannow` no CMD como administrador para corrigir DLLs e arquivos danificados. O registro fica em `%WinDir%\\Logs\\CBS\\CBS.log`.', report: 'Verificação e reparo dos arquivos do sistema (SFC)' },
       { id: 's4-dns', guide: 'dns', lead: 'Rede e Navegação:', text: 'Execute `ipconfig /flushdns` para limpar o cache DNS e evitar lentidão no navegador.', report: 'Limpeza do cache de rede (DNS)' }
     ]
   },
@@ -141,7 +142,7 @@ export const allSteps = [
     intro: 'Memória RAM e disco com defeito são causas comuns de tela azul.',
     items: [
       { id: 'b2-ram', guide: 'mdsched', lead: 'Memória RAM:', text: 'Execute `mdsched` e escolha reiniciar agora. O teste roda antes do Windows iniciar e o resultado aparece depois do boot.', report: 'Teste da memória RAM (Diagnóstico de Memória do Windows)' },
-      { id: 'b2-disco', guide: 'chkdsk', lead: 'Disco:', text: 'Execute `chkdsk C: /f /r` no CMD como administrador e aceite agendar para o próximo reinício. Em HD mecânico pode demorar bastante.', report: 'Verificação de erros no disco (CHKDSK)' },
+      { id: 'b2-disco', guide: 'chkdsk', lead: 'Disco:', text: 'Antes, confira a saúde no CrystalDiskInfo: se estiver em Alerta ou Crítico, não rode o CHKDSK e faça backup imediato. Em HD mecânico saudável, execute `chkdsk C: /f /r`; em SSD, execute apenas `chkdsk C: /f` (o /r gasta o SSD sem benefício). Use o CMD como administrador e aceite agendar para o próximo reinício. Em HD mecânico pode demorar bastante.', report: 'Verificação de erros no disco (CHKDSK)' },
       { id: 'b2-temp', lead: 'Temperatura:', text: 'Se a tela azul aparece em tarefas pesadas, acompanhe a temperatura com um monitor leve (ex.: HWMonitor) e peça ao cliente para conferir poeira nas saídas de ar.', report: 'Verificação de temperatura e ventilação' }
     ],
     tip: 'O teste de memória exige reiniciar o computador. Avise o cliente antes: durante o teste a máquina não pode ser usada.'
@@ -153,7 +154,7 @@ export const allSteps = [
     title: 'Reparar os Arquivos do Windows',
     intro: 'Arquivos de sistema corrompidos também provocam travamentos. Execute no CMD como administrador.',
     items: [
-      { id: 'b3-dism', guide: 'dism', lead: 'Reparo de Imagem:', text: 'Execute `dism /online /cleanup-image /restorehealth`. Requer conexão com a Internet.', report: 'Reparo da imagem do Windows (DISM)' },
+      { id: 'b3-dism', guide: 'dism', lead: 'Reparo de Imagem:', text: 'Execute `dism /online /cleanup-image /restorehealth` e aguarde chegar a 100%. Requer conexão com a Internet; sem ela, use uma ISO do Windows como origem (veja "Ver no Guia").', report: 'Reparo da imagem do Windows (DISM)' },
       { id: 'b3-sfc', guide: 'sfc', lead: 'Verificação de Integridade:', text: 'Depois do DISM, execute `sfc /scannow`.', report: 'Verificação e reparo dos arquivos do sistema (SFC)' }
     ]
   },
