@@ -27,7 +27,7 @@ export const allSteps = [
     intro: 'Antes de alterar qualquer configuração de software, entenda o estado do hardware da máquina do cliente.',
     items: [
       { id: 's1-armazenamento', lead: 'Verificar Armazenamento:', text: 'Confira em "Este Computador" se o disco (C:) é SSD ou HD mecânico (isso muda como verificar o disco depois) e o espaço livre (menos de 10% livre causa lentidão extrema).', report: 'Verificação do disco e do espaço livre' },
-      { id: 's1-ram-cpu', guide: 'taskmgr', lead: 'Verificar Memória RAM & CPU:', text: 'Abra o Gerenciador de Tarefas com `Ctrl + Shift + Esc` e analise o uso de CPU, RAM e Disco em repouso.', report: 'Análise do uso de processador, memória e disco' },
+      { id: 's1-ram-cpu', guide: 'taskmgr', lead: 'Verificar Memória RAM & CPU:', text: 'Abra o Gerenciador de Tarefas com `Ctrl + Shift + Esc` e analise o uso de CPU, RAM e Disco em repouso. Em repouso, desconfie de disco perto de 100%, RAM acima de 80% ou um programa gastando CPU sem estar em uso. Anote os valores para comparar no fim do atendimento.', report: 'Análise do uso de processador, memória e disco' },
       { id: 's1-smart', lead: 'Saúde do Disco (S.M.A.R.T.):', text: 'Verifique a saúde do disco com o CrystalDiskInfo antes de qualquer verificação profunda (obrigatório antes do CHKDSK). Se o status for Alerta (amarelo) ou Crítico (vermelho), pare, faça backup imediato dos dados do cliente e não rode o CHKDSK. Não adianta otimizar o software se o disco estiver danificado.', report: 'Verificação da saúde do disco (S.M.A.R.T.)' }
     ],
     tip: 'Se o cliente usa HD mecânico como disco do sistema, recomende a migração para SSD como prioridade máxima de upgrade.'
@@ -39,7 +39,7 @@ export const allSteps = [
     title: 'Limpeza de Inicialização (Boot Limpo)',
     intro: 'Softwares em segundo plano são a causa nº 1 de lentidão após ligar o sistema.',
     items: [
-      { id: 's2-apps', lead: 'Aplicativos de Inicialização:', text: 'No Gerenciador de Tarefas, aba "Aplicativos de inicialização", desative programas pesados que não precisam abrir com o Windows (ex.: Spotify, Steam, Discord, Teams).', report: 'Desativação de programas desnecessários na inicialização' },
+      { id: 's2-apps', lead: 'Aplicativos de Inicialização:', text: 'No Gerenciador de Tarefas, aba "Aplicativos de inicialização", desative programas pesados que não precisam abrir com o Windows (ex.: Spotify, Steam, Discord, Teams). Mantenha antivírus, drivers de áudio, touchpad e utilitários do fabricante. Priorize os de impacto Alto. Desativar só impede de abrir sozinho; o programa não é removido.', report: 'Desativação de programas desnecessários na inicialização' },
       { id: 's2-servicos', guide: 'msconfig', lead: 'Serviços de Terceiros:', text: 'Execute `msconfig`, vá em "Serviços", marque obrigatoriamente "Ocultar todos os serviços Microsoft" e desative apenas atualizadores desnecessários (ex.: Adobe, Google Update). Nunca use "Desativar tudo" sem ocultar os serviços Microsoft.', report: 'Revisão dos serviços de terceiros na inicialização' }
     ],
     tip: 'Não mexa em "Inicialização" > "Opções avançadas" para limitar o número de processadores: isso não acelera nada e pode causar tela azul (INACCESSIBLE_BOOT_DEVICE).'
@@ -64,7 +64,7 @@ export const allSteps = [
     items: [
       { id: 's4-dism', guide: 'dism', lead: 'Reparo de Imagem:', text: 'Se houver falhas recorrentes, rode `dism /online /cleanup-image /restorehealth` no CMD como administrador e aguarde chegar a 100% antes de seguir. Precisa de internet; sem ela, use uma ISO do Windows como origem (veja "Ver no Guia").', report: 'Reparo da imagem do Windows (DISM)' },
       { id: 's4-sfc', guide: 'sfc', lead: 'Verificação de Integridade:', text: 'Depois do DISM, execute `sfc /scannow` no CMD como administrador para corrigir DLLs e arquivos danificados. O registro fica em `%WinDir%\\Logs\\CBS\\CBS.log`.', report: 'Verificação e reparo dos arquivos do sistema (SFC)' },
-      { id: 's4-dns', guide: 'dns', lead: 'Rede e Navegação:', text: 'Execute `ipconfig /flushdns` para limpar o cache DNS e evitar lentidão no navegador.', report: 'Limpeza do cache de rede (DNS)' }
+      { id: 's4-dns', guide: 'dns', lead: 'Rede e Navegação:', text: 'Execute `ipconfig /flushdns` para limpar o cache DNS e evitar lentidão no navegador. É seguro e não precisa reiniciar: só descarta o cache. Se outros aparelhos da rede também têm o problema, a causa não é este computador.', report: 'Limpeza do cache de rede (DNS)' }
     ]
   },
   {
@@ -74,9 +74,9 @@ export const allSteps = [
     title: 'Reboot e Teste Final',
     intro: 'Confirme a melhoria e entregue a máquina pronta ao cliente.',
     items: [
-      { id: 's5-reboot', lead: 'Reinicialização Completa:', text: 'Reinicie o sistema para consolidar os arquivos reparados e as alterações feitas.', report: 'Reinicialização do computador' },
-      { id: 's5-validacao', lead: 'Validação dos Resultados:', text: 'Abra o Gerenciador de Tarefas e confirme se o uso de CPU, RAM e Disco baixou em repouso.', report: 'Teste final de desempenho' },
-      { id: 's5-relatorio', lead: 'Relatório ao Cliente:', text: 'Informe brevemente as ações realizadas (arquivos limpos, inicialização otimizada e correções de sistema).', report: null }
+      { id: 's5-reboot', lead: 'Reinicialização Completa:', text: 'Reinicie o sistema para consolidar os arquivos reparados e as alterações feitas. Use "Reiniciar" e não "Desligar": com a inicialização rápida do Windows, desligar não recarrega tudo.', report: 'Reinicialização do computador' },
+      { id: 's5-validacao', lead: 'Validação dos Resultados:', text: 'Abra o Gerenciador de Tarefas e confirme se o uso de CPU, RAM e Disco baixou em repouso. Compare com os valores anotados na triagem. Se continuar alto, o problema pode ser hardware ou excesso de programas: oriente o cliente em vez de prometer melhora.', report: 'Teste final de desempenho' },
+      { id: 's5-relatorio', lead: 'Relatório ao Cliente:', text: 'Informe brevemente as ações realizadas (arquivos limpos, inicialização otimizada e correções de sistema). Use linguagem simples, diga o que o cliente deve observar nos próximos dias e recomende manter backup dos arquivos importantes.', report: null }
     ]
   },
 
@@ -88,9 +88,9 @@ export const allSteps = [
     title: 'Descobrir Onde Está o Problema',
     intro: 'Antes de mexer no Windows, descubra se a falha é do computador, do roteador ou do provedor.',
     items: [
-      { id: 'i1-escopo', lead: 'Isolar o problema:', text: 'Teste outro aparelho na mesma rede e outro site no mesmo computador. Se só este computador falha, o problema está nele; se todos falham, está na rede.', report: 'Teste para identificar se a falha era do computador ou da rede' },
-      { id: 'i1-fisico', lead: 'Conferir o básico:', text: 'Veja se o cabo está firme, se o Wi-Fi está ligado (modo avião desativado) e se o sinal está forte o bastante.', report: 'Conferência de cabo, Wi-Fi e intensidade do sinal' },
-      { id: 'i1-roteador', lead: 'Reiniciar roteador e modem:', text: 'Desligue da tomada por cerca de 30 segundos, religue e aguarde as luzes estabilizarem antes de testar de novo.', report: 'Reinício do roteador e do modem' }
+      { id: 'i1-escopo', lead: 'Isolar o problema:', text: 'Teste outro aparelho na mesma rede e outro site no mesmo computador. Se só este computador falha, o problema está nele; se todos falham, está na rede. Anote o resultado: ele decide se você segue nos passos do Windows ou orienta o cliente a acionar o provedor.', report: 'Teste para identificar se a falha era do computador ou da rede' },
+      { id: 'i1-fisico', lead: 'Conferir o básico:', text: 'Veja se o cabo está firme, se o Wi-Fi está ligado (modo avião desativado) e se o sinal está forte o bastante. Se no cabo funciona e no Wi-Fi não, o problema é o sinal ou a placa Wi-Fi do computador.', report: 'Conferência de cabo, Wi-Fi e intensidade do sinal' },
+      { id: 'i1-roteador', lead: 'Reiniciar roteador e modem:', text: 'Desligue da tomada por cerca de 30 segundos, religue e aguarde as luzes estabilizarem antes de testar de novo. Não aperte o botão de reset do roteador: ele apaga as configurações do provedor e do Wi-Fi.', report: 'Reinício do roteador e do modem' }
     ],
     tip: 'Se vários aparelhos continuam sem internet depois de reiniciar o roteador, peça ao cliente para acionar o provedor.'
   },
@@ -101,10 +101,10 @@ export const allSteps = [
     title: 'Renovar a Configuração de Rede',
     intro: 'Estes comandos limpam e renovam a configuração de rede do Windows. Execute no CMD como administrador.',
     items: [
-      { id: 'i2-ping', lead: 'Testar a conexão:', text: 'Execute `ping 8.8.8.8`. Se responde, mas `ping google.com` falha, o problema é de DNS. Se nenhum responde, a conexão com a internet está fora.', report: 'Teste de conexão e de DNS (ping)' },
-      { id: 'i2-dns', guide: 'dns', lead: 'Limpar o cache DNS:', text: 'Execute `ipconfig /flushdns`.', report: 'Limpeza do cache de rede (DNS)' },
-      { id: 'i2-renew', lead: 'Renovar o endereço IP:', text: 'Execute `ipconfig /release` e depois `ipconfig /renew`.', report: 'Renovação do endereço IP' },
-      { id: 'i2-winsock', guide: 'winsock', lead: 'Redefinir o Winsock:', text: 'Execute `netsh winsock reset` e reinicie o computador em seguida.', report: 'Redefinição da pilha de rede (Winsock)' }
+      { id: 'i2-ping', lead: 'Testar a conexão:', text: 'Execute `ping 8.8.8.8`. Se responde, mas `ping google.com` falha, o problema é de DNS. Se nenhum responde, a conexão com a internet está fora. Se o ping para 8.8.8.8 também falhar, não adianta mexer em DNS: o problema está antes, na conexão.', report: 'Teste de conexão e de DNS (ping)' },
+      { id: 'i2-dns', guide: 'dns', lead: 'Limpar o cache DNS:', text: 'Execute `ipconfig /flushdns`. É seguro e não precisa reiniciar.', report: 'Limpeza do cache de rede (DNS)' },
+      { id: 'i2-renew', lead: 'Renovar o endereço IP:', text: 'Execute `ipconfig /release` e depois `ipconfig /renew`. Em acesso remoto, rode os dois juntos (veja a dica da etapa), senão a conexão cai antes do segundo comando.', report: 'Renovação do endereço IP' },
+      { id: 'i2-winsock', guide: 'winsock', lead: 'Redefinir o Winsock:', text: 'Execute `netsh winsock reset` e reinicie o computador em seguida. Use só se os passos anteriores não resolveram: pode exigir reconfigurar VPN e alguns antivírus.', report: 'Redefinição da pilha de rede (Winsock)' }
     ],
     tip: 'Em atendimento remoto, `ipconfig /release` derruba a conexão e pode encerrar o acesso remoto. Avise o cliente e rode os dois juntos: `ipconfig /release & ipconfig /renew`.'
   },
@@ -116,8 +116,8 @@ export const allSteps = [
     intro: 'Confirme que a conexão voltou ao normal antes de encerrar.',
     items: [
       { id: 'i3-reboot', lead: 'Reiniciar o computador:', text: 'É necessário depois do reset do Winsock.', report: 'Reinicialização do computador' },
-      { id: 'i3-teste', lead: 'Testar a navegação:', text: 'Abra dois sites diferentes, se possível em dois navegadores, e confira se o Wi-Fi mantém o sinal estável.', report: 'Teste final de navegação' },
-      { id: 'i3-relatorio', lead: 'Relatório ao Cliente:', text: 'Informe o que foi feito e oriente: se a falha voltar em vários aparelhos, o provedor deve ser acionado.', report: null }
+      { id: 'i3-teste', lead: 'Testar a navegação:', text: 'Abra dois sites diferentes, se possível em dois navegadores, e confira se o Wi-Fi mantém o sinal estável. Se cair de novo só no Wi-Fi, teste no cabo para separar problema de sinal de problema do computador.', report: 'Teste final de navegação' },
+      { id: 'i3-relatorio', lead: 'Relatório ao Cliente:', text: 'Informe o que foi feito e oriente: se a falha voltar em vários aparelhos, o provedor deve ser acionado. Deixe claro o que foi testado, para o cliente não precisar repetir os testes ao falar com o provedor.', report: null }
     ]
   },
 
@@ -129,9 +129,9 @@ export const allSteps = [
     title: 'Entender a Tela Azul',
     intro: 'O código de parada e o momento em que o problema começou apontam a causa mais provável.',
     items: [
-      { id: 'b1-codigo', lead: 'Anotar o código de parada:', text: 'Peça ao cliente uma foto ou o texto da tela azul (ex.: `IRQL_NOT_LESS_OR_EQUAL`, `CRITICAL_PROCESS_DIED`).', report: 'Registro do código de erro da tela azul' },
-      { id: 'b1-quando', lead: 'Perguntar quando começou:', text: 'Foi depois de atualização, instalação de programa ou driver, ou troca de peça? Isso costuma indicar o culpado.', report: 'Levantamento de quando os travamentos começaram' },
-      { id: 'b1-eventos', lead: 'Consultar o Visualizador de Eventos:', text: 'Execute `eventvwr`, abra "Logs do Windows" > "Sistema" e procure erros críticos próximos da hora do travamento.', report: 'Análise do Visualizador de Eventos do Windows' }
+      { id: 'b1-codigo', lead: 'Anotar o código de parada:', text: 'Peça ao cliente uma foto ou o texto da tela azul (ex.: `IRQL_NOT_LESS_OR_EQUAL`, `CRITICAL_PROCESS_DIED`). O código é uma pista, não um diagnóstico: erros de memória costumam apontar driver ou RAM, e CRITICAL_PROCESS_DIED costuma apontar arquivo de sistema, driver ou disco.', report: 'Registro do código de erro da tela azul' },
+      { id: 'b1-quando', lead: 'Perguntar quando começou:', text: 'Foi depois de atualização, instalação de programa ou driver, ou troca de peça? Isso costuma indicar o culpado. Se começou logo após uma mudança, desfazer essa mudança é o primeiro teste. Se não houve mudança nenhuma, suspeite mais de hardware.', report: 'Levantamento de quando os travamentos começaram' },
+      { id: 'b1-eventos', lead: 'Consultar o Visualizador de Eventos:', text: 'Execute `eventvwr`, abra "Logs do Windows" > "Sistema" e procure erros críticos próximos da hora do travamento. Anote a origem de cada erro (ex.: disco, driver, Kernel-Power). Um Kernel-Power 41 sem outras pistas indica desligamento inesperado, comum em fonte ou superaquecimento.', report: 'Análise do Visualizador de Eventos do Windows' }
     ]
   },
   {
@@ -165,9 +165,9 @@ export const allSteps = [
     title: 'Remover o Que Causa o Travamento',
     intro: 'Drivers e programas recentes estão entre os principais suspeitos.',
     items: [
-      { id: 'b4-programa', lead: 'Desfazer a última mudança:', text: 'Desinstale o programa ou driver instalado pouco antes das telas azuis (Configurações > Aplicativos).', report: 'Remoção do programa ou driver suspeito' },
-      { id: 'b4-drivers', lead: 'Atualizar drivers:', text: 'Atualize vídeo e chipset pelo site do fabricante do computador ou da placa. Evite programas "atualizadores de driver".', report: 'Atualização dos drivers de vídeo e chipset' },
-      { id: 'b4-update', lead: 'Windows Update:', text: 'Instale as atualizações pendentes do Windows e reinicie.', report: 'Instalação das atualizações do Windows' }
+      { id: 'b4-programa', lead: 'Desfazer a última mudança:', text: 'Desinstale o programa ou driver instalado pouco antes das telas azuis (Configurações > Aplicativos). Depois de desinstalar, reinicie e teste antes de mudar outra coisa: mexer em várias coisas ao mesmo tempo esconde a causa.', report: 'Remoção do programa ou driver suspeito' },
+      { id: 'b4-drivers', lead: 'Atualizar drivers:', text: 'Atualize vídeo e chipset pelo site do fabricante do computador ou da placa. Evite programas "atualizadores de driver". Se a tela azul começou logo depois de atualizar um driver, volte à versão anterior em Gerenciador de Dispositivos > Propriedades > Driver > Reverter Driver.', report: 'Atualização dos drivers de vídeo e chipset' },
+      { id: 'b4-update', lead: 'Windows Update:', text: 'Instale as atualizações pendentes do Windows e reinicie. Se a tela azul começou depois de uma atualização, veja qual foi em Configurações > Windows Update > Histórico antes de continuar.', report: 'Instalação das atualizações do Windows' }
     ],
     tip: 'Se a tela azul persistir mesmo depois disso, suspeite de hardware (RAM, disco ou fonte) e recomende uma avaliação presencial.'
   },
@@ -178,8 +178,8 @@ export const allSteps = [
     title: 'Acompanhar a Estabilidade',
     intro: 'Confirme que o computador aguenta o uso normal antes de encerrar.',
     items: [
-      { id: 'b5-reboot', lead: 'Reinicialização e teste:', text: 'Reinicie e use o computador por alguns minutos com as tarefas que causavam o problema.', report: 'Reinicialização e teste de estabilidade' },
-      { id: 'b5-relatorio', lead: 'Relatório ao Cliente:', text: 'Explique o que foi encontrado e combine de o cliente avisar se a tela azul voltar, anotando o novo código.', report: null }
+      { id: 'b5-reboot', lead: 'Reinicialização e teste:', text: 'Reinicie e use o computador por alguns minutos com as tarefas que causavam o problema. Prefira reproduzir a situação exata que causava a tela azul (jogo, programa pesado): uso leve não prova que o problema foi resolvido.', report: 'Reinicialização e teste de estabilidade' },
+      { id: 'b5-relatorio', lead: 'Relatório ao Cliente:', text: 'Explique o que foi encontrado e combine de o cliente avisar se a tela azul voltar, anotando o novo código. Peça para anotar data, hora e código se voltar, e para manter backup dos arquivos importantes enquanto isso.', report: null }
     ]
   }
 ]

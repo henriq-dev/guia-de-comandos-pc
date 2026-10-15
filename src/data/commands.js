@@ -34,7 +34,7 @@ export const commands = [
     title: 'Remover Fila de Reparos Pendentes',
     description: 'Cancela atualizações e operações de reparo pendentes que bloqueiam outros utilitários de diagnóstico.',
     code: 'dism /online /cleanup-image /revertpendingactions',
-    guide: 'Use só quando o computador ficar preso em "reparo de sistema pendente" após atualizações interrompidas. Reinicie em seguida.',
+    guide: 'Use só quando o computador ficar preso em "reparo de sistema pendente" após atualizações interrompidas. Reinicie em seguida. É último recurso: cancela as atualizações pendentes e a atualização em andamento pode ficar incompleta e ser refeita depois pelo Windows Update. Tente reiniciar normalmente antes.',
     categories: ['cmd', 'limpeza']
   },
   {
@@ -44,7 +44,7 @@ export const commands = [
     title: 'Arquivos Temporários do Usuário',
     description: 'Abre a pasta com os arquivos temporários gerados pelos aplicativos da conta atual.',
     code: '%temp%',
-    guide: 'Pressione Ctrl + A para selecionar tudo e Shift + Delete para apagar de forma permanente. Ignore arquivos em uso. Confira que está na pasta temporária antes de apagar.',
+    guide: 'Pressione Ctrl + A para selecionar tudo e Shift + Delete para apagar de forma permanente. Ignore arquivos em uso. Confira que está na pasta temporária antes de apagar. Feche os programas abertos antes: a pasta fica dentro do perfil do usuário (AppData\\Local\\Temp) e não contém Documentos nem Fotos.',
     categories: ['run', 'limpeza']
   },
   {
@@ -52,9 +52,9 @@ export const commands = [
     type: 'run',
     icon: FolderOpen,
     title: 'Arquivos Temporários do Sistema',
-    description: 'Abre a pasta de arquivos temporários raiz do sistema operacional Windows.',
+    description: 'Abre a pasta de arquivos temporários raiz do sistema operacional Windows (C:\\Windows\\Temp).',
     code: 'temp',
-    guide: 'Apague o conteúdo periodicamente para liberar espaço no SSD/HD principal.',
+    guide: 'Apague o conteúdo periodicamente para liberar espaço no SSD/HD principal. Pode pedir permissão de administrador ao abrir: confirme a janela. Pule os arquivos em uso.',
     categories: ['run', 'limpeza']
   },
   {
@@ -84,7 +84,7 @@ export const commands = [
     title: 'Renovar Cache DNS',
     description: 'Limpa o cache de resolução de nomes DNS para corrigir sites que não carregam ou abrem com endereço antigo.',
     code: 'ipconfig /flushdns',
-    guide: 'Essencial em atendimentos remotos quando o cliente relata lentidão de navegação ou sites não carregando.',
+    guide: 'Útil em atendimentos remotos quando o cliente relata lentidão de navegação ou sites não carregando. É seguro e não precisa reiniciar: só descarta o cache, que o Windows refaz sozinho. Não resolve falha do roteador ou do provedor: teste outro aparelho antes.',
     categories: ['cmd', 'otimizacao']
   },
   {
@@ -114,7 +114,7 @@ export const commands = [
     title: 'Redefinir Rede (Winsock)',
     description: 'Restaura o catálogo Winsock ao padrão, resolvendo falhas de conexão causadas por softwares ou malwares.',
     code: 'netsh winsock reset',
-    guide: 'Execute como Administrador e reinicie o computador em seguida. Combine com ipconfig /flushdns quando o cliente relatar internet instável.',
+    guide: 'Execute como Administrador e reinicie o computador em seguida. Combine com ipconfig /flushdns quando o cliente relatar internet instável. Use só depois que ipconfig /flushdns e ipconfig /renew não resolverem. O reset pode remover configurações de VPN e de alguns antivírus que se encaixam na rede: avise o cliente, pois podem precisar ser reconfigurados.',
     categories: ['cmd', 'otimizacao']
   },
   {
@@ -124,7 +124,7 @@ export const commands = [
     title: 'Diagnóstico de Memória RAM',
     description: 'Abre o teste nativo de memória do Windows para investigar travamentos e telas azuis.',
     code: 'mdsched',
-    guide: 'O teste exige reiniciar o computador. Avise o cliente antes: durante o teste a tela fica azul e a máquina não pode ser usada.',
+    guide: 'O teste exige reiniciar o computador. Avise o cliente antes: durante o teste a tela fica azul e a máquina não pode ser usada. Escolha "Reiniciar agora" para testar na hora ou "na próxima inicialização". O teste leva vários minutos. O resultado aparece depois do boot; se não aparecer, veja em Visualizador de Eventos > Logs do Windows > Sistema, origem MemoryDiagnostics-Results.',
     categories: ['run', 'otimizacao']
   },
   {
@@ -134,7 +134,7 @@ export const commands = [
     title: 'Gerenciador de Tarefas',
     description: 'Mostra o uso de CPU, RAM, disco e rede em tempo real e os aplicativos de inicialização.',
     code: 'taskmgr',
-    guide: 'Atalho direto: Ctrl + Shift + Esc. Use na triagem e de novo no fim do atendimento para comparar o consumo em repouso.',
+    guide: 'Atalho direto: Ctrl + Shift + Esc. Use na triagem e de novo no fim do atendimento para comparar o consumo em repouso. Em repouso, desconfie de disco parado perto de 100%, memória acima de 80% ou um programa gastando CPU sem estar em uso.',
     categories: ['run', 'otimizacao']
   }
 ]

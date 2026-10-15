@@ -1,5 +1,15 @@
 # Histórico de versões
 
+## 2.9.4 — Explicações mais completas no Roteiro (só conteúdo)
+- 22 itens do Roteiro ganharam contexto sem perder o texto anterior: triagem (o que observar em repouso), inicialização (o que manter ativo), DNS, testes de internet (como interpretar o ping e o cabo), tela azul (como ler o código e o Visualizador de Eventos, reverter driver) e encerramento (reiniciar em vez de desligar, comparar com a triagem, orientar o cliente).
+- Roteador: aviso para não usar o botão de reset.
+
+## 2.9.3 — Explicações mais completas no Guia (só conteúdo)
+- Sete cards ganharam contexto, risco e quando usar, sem apagar o texto anterior: Temporários do Usuário e do Sistema, Fila de Reparos Pendentes, DNS, Winsock, Diagnóstico de Memória e Gerenciador de Tarefas.
+- DNS deixou de ser "essencial": agora diz que é seguro, não exige reinício e não resolve falha do roteador ou do provedor.
+- Winsock: só depois de `flushdns` e `renew`; avisa sobre VPN e antivírus.
+- `mdsched`: explica as duas opções de reinício e onde achar o resultado.
+
 ## 2.9.2 — Textos de segurança técnica (só conteúdo)
 - Ponto de restauração: deixa claro que não é backup de Documentos, Fotos e Downloads e que não resolve erro de NTFS nem defeito físico do disco.
 - CrystalDiskInfo passa a ser obrigatório antes do CHKDSK. Em Alerta ou Crítico, não rodar e fazer backup. `/r` só em HD mecânico saudável; em SSD, apenas `/f`.
