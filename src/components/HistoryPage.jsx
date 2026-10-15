@@ -121,7 +121,7 @@ export default function HistoryPage({ history, onDelete, onClear, onGoRoteiro, o
     <section ref={root} aria-label="Histórico de atendimentos" className="mx-auto max-w-3xl">
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm text-muted">
-          <strong className="text-white">{history.length}</strong> {history.length === 1 ? 'atendimento salvo' : 'atendimentos salvos'} · guarda os últimos {MAX_HISTORY}, só neste navegador.
+          <strong className="text-white">{history.length}</strong> {history.length === 1 ? 'atendimento salvo' : 'atendimentos salvos'} · guarda os últimos {MAX_HISTORY}, só neste navegador. Tem nome do cliente e do equipamento: não deixe em perfil compartilhado e guarde o backup com cuidado.
         </p>
 
         {confirmClear ? (

@@ -22,9 +22,9 @@ export const commands = [
     type: 'cmd',
     icon: Wrench,
     title: 'Reparo de Imagem do Windows (DISM)',
-    description: 'Restaura a imagem base dos componentes do Windows através do Windows Update quando o SFC falha.',
+    description: 'Restaura a imagem base dos componentes do Windows usando o Windows Update. É a base que o SFC usa para reparar: rode o DISM primeiro.',
     code: 'dism /online /cleanup-image /restorehealth',
-    guide: 'Requer conexão com a Internet. Execute antes do sfc /scannow se o sistema estiver com graves instabilidades.',
+    guide: 'Requer conexão com a Internet. Execute antes do sfc /scannow: se a imagem estiver danificada, o SFC não consegue reparar os arquivos.',
     categories: ['cmd', 'otimizacao']
   },
   {

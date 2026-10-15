@@ -89,7 +89,7 @@ export default function ReportDialog({ open, onClose, steps, routeLabel, checked
               <p className={`mt-1 text-xs ${phoneFilled && !phoneValid ? 'text-amber' : 'text-muted'}`}>
                 {phoneFilled && !phoneValid
                   ? 'Número incompleto: o WhatsApp vai abrir para você escolher o contato.'
-                  : 'Não fica salvo no navegador. Sem número, você escolhe o contato no WhatsApp.'}
+                  : 'Não fica salvo no navegador. Número do Brasil com DDD; de outro país, comece com + e o código. Sem número, você escolhe o contato.'}
               </p>
             </div>
 

@@ -1,5 +1,29 @@
 # Histórico de versões
 
+## 2.9.1 — Ajuste fino do aviso no celular
+- O espaço reservado no fim da página agora acompanha os avisos visíveis (só "Sem internet" usa uma faixa baixa; instalar e atualizar usam mais). Antes sempre reservava 9rem.
+
+## 2.9.0 — Testes dentro do projeto e Roteiro dividido
+- `npm test`: 14 testes unitários (Node puro, sem instalar nada) para o relatório, telefone, histórico, backup, validadores e integridade do conteúdo (ids repetidos, etapa inexistente, termo do "Ver no Guia" sem comando).
+- `npm run test:e2e`: 8 scripts de navegador (226 verificações) que sobem o site sozinhos e conferem relatório, rotas, histórico, PWA offline, anotações, cronômetro, backup e as correções da auditoria.
+- `RoteiroPage.jsx` caiu de 299 para 141 linhas, dividido em `RouteSelector`, `ProgressCard`, `StepCard` e `InlineText`. Nenhum comportamento mudou (todos os testes passam antes e depois).
+
+## 2.8.1 — Dependências atualizadas
+- Vite 5 → 6 (corrige o aviso do esbuild). Requer Node 18 ou superior.
+- Correções compatíveis de `micromatch` e `postcss-selector-parser` (via `overrides` no package.json). O CSS gerado ficou idêntico, byte a byte.
+- `npm audit`: de 9 avisos para 5, todos só de desenvolvimento. Produção continua com 0.
+- Os 5 que restam vêm do `braces` dentro do Tailwind 3 e não têm versão corrigida nessa linha; só o Tailwind 4 resolve. É uma migração grande (configuração e classes), então ficou para uma etapa própria. O risco é pequeno: é um problema de padrões de arquivo muito aninhados em ferramentas de build, que aqui não recebem texto de fora.
+
+## 2.8.0 — Correções da auditoria do v2.7.0
+- Conteúdo: o DISM dizia "quando o SFC falha" mas a orientação pedia para rodá-lo antes do SFC. Agora o guia explica a ordem: DISM primeiro, porque o SFC depende da imagem do Windows estar íntegra.
+- Conteúdo: a fase "Primordial" virou "Diagnóstico Inicial".
+- Dados salvos: favoritos, checklist, relatório, anotações, rota e página são conferidos no carregamento. Se o formato estiver errado, só aquela chave volta ao padrão; o resto (ex.: histórico) é preservado.
+- Telefone: número com "+" e código de outro país (ex.: +351...) não vira número do Brasil. Sem "+", continua assumindo Brasil com DDD.
+- Aviso de instalação/offline: reserva espaço no fim da página (nada cobre o rodapé) e respeita a área segura de celulares com gestos (`viewport-fit=cover`).
+- Histórico: aviso de privacidade (nome do cliente e do equipamento; não usar em perfil compartilhado; cuidado com o backup).
+- Checklist entre rotas: decisão documentada. As marcações são compartilhadas de propósito (etapas iguais continuam marcadas ao trocar de rota no mesmo atendimento); "Novo atendimento" limpa tudo.
+- Dependências: `npm audit` ainda aponta 9 avisos, todos só de desenvolvimento (Vite e Tailwind). 0 em produção. A correção exige atualizar o Vite para uma versão maior, o que fica para uma etapa própria com testes.
+
 ## 2.7.0 — Backup do histórico e copiar comando (Fácil)
 - Histórico: botões "Exportar backup" (baixa um arquivo .json) e "Importar backup" (junta com o histórico atual, sem repetir atendimentos e respeitando o limite de 50).
 - A importação só aceita os campos conhecidos, limita o tamanho dos textos e mostra mensagem clara para arquivo inválido. Na tela vazia também dá para importar (útil ao trocar de computador).

@@ -38,9 +38,16 @@ export function buildMessage({ client, machine, status, notes }, procedures, { d
   return lines.join('\n')
 }
 
-// Deixa só dígitos e põe o 55 do Brasil na frente. Devolve '' se o número estiver incompleto.
+// Deixa só dígitos. Sem "+", assume Brasil e põe o 55 na frente. Com "+", respeita o código do país
+// informado (ex.: +351...) e NÃO converte para Brasil. Devolve '' se o número estiver incompleto.
 export function normalizePhone(raw) {
-  let digits = raw.replace(/\D/g, '').replace(/^0+/, '') // tira o 0 de operadora
+  const international = raw.trim().startsWith('+')
+  let digits = raw.replace(/\D/g, '')
+  if (international) {
+    if (digits.startsWith('55')) return /^55\d{10,11}$/.test(digits) ? digits : ''
+    return /^[1-9]\d{7,14}$/.test(digits) ? digits : '' // padrão internacional: até 15 dígitos
+  }
+  digits = digits.replace(/^0+/, '') // tira o 0 de operadora
   if (digits.length === 10 || digits.length === 11) digits = '55' + digits // DDD + número
   return /^55\d{10,11}$/.test(digits) ? digits : ''
 }

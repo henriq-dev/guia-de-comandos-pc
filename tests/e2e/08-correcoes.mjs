@@ -1,0 +1,70 @@
+import { launchBrowser, APP_URL, OUT, serveDir, DIST } from './_env.mjs'
+import { join } from 'node:path'
+import { tmpdir } from 'node:os'
+import { normalizePhone, buildWhatsAppLink } from '../../src/utils/report.js'
+import { isStringArray, isStringRecord, isString, isPlainObject } from '../../src/utils/validators.js'
+let pass=0, fail=0; const ok=(c,m)=>{c?pass++:(fail++,console.log('FALHOU',m))}
+// ---- telefone
+ok(normalizePhone('(69) 99123-4567')==='5569991234567','BR com DDD')
+ok(normalizePhone('069 99123-4567')==='5569991234567','BR com 0 de operadora')
+ok(normalizePhone('+55 69 99123-4567')==='5569991234567','+55 mantém')
+ok(normalizePhone('+351 912 345 678')==='351912345678','Portugal não vira 55')
+ok(normalizePhone('+44 20 7946 0958')==='442079460958','Reino Unido')
+ok(normalizePhone('+1 415 555 2671')==='14155552671','EUA')
+ok(normalizePhone('123')==='' && normalizePhone('')==='' && normalizePhone('+5569')==='' && normalizePhone('+12')==='','inválidos')
+ok(normalizePhone('+0123456789')==='','começa com 0 após +')
+ok(buildWhatsAppLink('+351912345678','oi').startsWith('https://wa.me/351912345678?text='),'link internacional')
+ok(buildWhatsAppLink('abc','oi').startsWith('https://wa.me/?text='),'link sem número')
+// ---- validadores
+ok(isStringArray(['a'])&&isStringArray([])&&!isStringArray('x')&&!isStringArray([1])&&!isStringArray({}),'isStringArray')
+ok(isStringRecord({a:'x'})&&isStringRecord({})&&!isStringRecord([])&&!isStringRecord({a:1})&&!isStringRecord(null)&&!isStringRecord('s'),'isStringRecord')
+ok(isString('a')&&!isString(1)&&isPlainObject({})&&!isPlainObject([])&&!isPlainObject(null),'isString/isPlainObject')
+// ---- navegador
+const U=APP_URL
+const b=await launchBrowser()
+const ctx=await b.newContext({viewport:{width:1280,height:900}})
+const p=await ctx.newPage(); const errs=[]; p.on('pageerror',e=>errs.push(e.message)); p.on('console',m=>{if(m.type()==='error'&&!/ERR_|Failed to load/.test(m.text()))errs.push(m.text())})
+const hist=[{id:'h1',createdAt:new Date().toISOString(),client:'Ana',machine:'PC',status:'resolvido',routeLabel:'R',done:1,total:2,message:'ok'}]
+await p.goto(U)
+await p.evaluate((h)=>{ const s={ 'katana-favs':'"x"','katana-checked':'{"a":1}','katana-report':'[1]','katana-notes':'"s"','katana-route':'5','katana-page':'7','katana-history':JSON.stringify(h),'katana-timer':'"x"' }; for(const k in s) localStorage.setItem(k,s[k]) },hist)
+await p.reload(); await p.waitForTimeout(800)
+ok(await p.locator('main article').count()===13,'guia abre com favoritos inválidos')
+await p.locator('nav button').nth(1).click(); await p.waitForTimeout(800)
+ok(await p.locator('.step-card').count()>0,'roteiro abre com checked/report/notes/route inválidos')
+await p.locator('input[type=checkbox]').nth(2).check(); await p.waitForTimeout(200)
+await p.getByRole('button',{name:/Gerar relatório/}).click(); await p.waitForTimeout(400)
+ok(await p.locator('#rep-client').isVisible(),'relatório abre com report inválido')
+await p.locator('#rep-phone').fill('+351 912 345 678')
+ok((await p.getByRole('link',{name:'Abrir no WhatsApp'}).getAttribute('href')).startsWith('https://wa.me/351912345678?text='),'WhatsApp internacional no site')
+ok(/de outro país/.test(await p.locator('dialog').textContent()),'dica de telefone internacional')
+await p.keyboard.press('Escape')
+await p.locator('nav button').nth(2).click(); await p.waitForTimeout(600)
+ok(await p.locator('.history-card').count()===1,'histórico saudável preservado')
+ok(/perfil compartilhado/.test(await p.locator('main').textContent()),'aviso de privacidade no histórico')
+// chaves inválidas foram regravadas com valor padrão válido
+const st=await p.evaluate(()=>({f:localStorage.getItem('katana-favs'),r:localStorage.getItem('katana-route')}))
+ok(st.f==='[]','favoritos regravados como lista: '+st.f)
+// conteúdo
+await p.locator('nav button').nth(0).click(); await p.waitForTimeout(500)
+await p.locator('input').first().fill('dism'); await p.waitForTimeout(400)
+const card=await p.locator('main article').first().textContent()
+ok(/rode o DISM primeiro/.test(card)&&/não consegue reparar/.test(card)&&!/quando o SFC falha/.test(card),'DISM/SFC coerente no guia')
+await p.locator('nav button').nth(1).click(); await p.waitForTimeout(700)
+ok((await p.locator('main').textContent()).includes('Etapa 02 — Diagnóstico Inicial'),'fase renomeada')
+ok(!(await p.locator('main').textContent()).includes('Primordial'),'sem "Primordial"')
+// banner PWA não cobre o rodapé (mobile)
+const m=await (await b.newContext({viewport:{width:390,height:800},hasTouch:true,isMobile:true})).newPage()
+await m.goto(U); await m.waitForTimeout(600)
+const semBanner=await m.evaluate(()=>document.documentElement.scrollHeight)
+await m.evaluate(()=>{const e=new Event('beforeinstallprompt',{cancelable:true});e.prompt=()=>{};e.userChoice=Promise.resolve({});window.dispatchEvent(e)})
+await m.waitForSelector('text=Instale o app'); await m.waitForTimeout(200)
+const comBanner=await m.evaluate(()=>document.documentElement.scrollHeight)
+ok(comBanner>semBanner+100,'espaço extra com banner: '+semBanner+' → '+comBanner)
+await m.evaluate(()=>window.scrollTo({top:document.documentElement.scrollHeight,behavior:'instant'})); await m.waitForTimeout(500)
+const r=await m.evaluate(()=>{const f=document.querySelector('footer').getBoundingClientRect();const b=document.querySelector('[aria-label="Instalar aplicativo"]').getBoundingClientRect();return {fb:f.bottom,bt:b.top}})
+ok(r.fb<=r.bt+1,'rodapé acima do banner: '+JSON.stringify(r))
+await m.getByLabel('Dispensar convite de instalação').click(); await m.waitForTimeout(200)
+ok(await m.evaluate(()=>document.documentElement.scrollHeight)<=semBanner+2,'espaço some ao dispensar')
+ok((await p.evaluate(()=>document.querySelector('meta[name=viewport]').content)).includes('viewport-fit=cover'),'viewport-fit=cover')
+ok(errs.length===0,'sem erros: '+errs.join('|'))
+await b.close(); console.log(`${pass} ok, ${fail} falhas`)

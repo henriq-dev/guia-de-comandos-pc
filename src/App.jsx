@@ -3,6 +3,7 @@ import { useLocalStorage } from './hooks/useLocalStorage'
 import { usePwa } from './hooks/usePwa'
 import PwaPrompts from './components/PwaPrompts'
 import { addRecord, removeRecord, mergeRecords } from './utils/history'
+import { isString, isStringArray } from './utils/validators'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import CommandsPage from './components/CommandsPage'
@@ -15,9 +16,9 @@ const PAGES = ['comandos', 'roteiro', 'historico']
 export default function App() {
   // ÂNCORA: estados globais. Página, favoritos, checklist e histórico ficam salvos no navegador.
   const [search, setSearch] = useState('')
-  const [savedPage, setPage] = useLocalStorage('katana-page', 'comandos')
-  const [favorites, setFavorites] = useLocalStorage('katana-favs', [])
-  const [checked, setChecked] = useLocalStorage('katana-checked', [])
+  const [savedPage, setPage] = useLocalStorage('katana-page', 'comandos', isString)
+  const [favorites, setFavorites] = useLocalStorage('katana-favs', [], isStringArray)
+  const [checked, setChecked] = useLocalStorage('katana-checked', [], isStringArray)
   const [savedHistory, setHistory] = useLocalStorage('katana-history', [])
 
   // Proteção: se o dado salvo estiver corrompido (não é lista / página desconhecida), usa o padrão

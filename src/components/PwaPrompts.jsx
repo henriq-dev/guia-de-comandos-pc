@@ -7,12 +7,18 @@ export default function PwaPrompts({ pwa }) {
   const [hideInstall, setHideInstall] = useState(false)
 
   const showInstall = canInstall && !hideInstall
+  // Altura reservada no fim da página = soma dos avisos visíveis (o de offline é uma faixa baixa; os outros são cartões)
+  const reservedRem = (online ? 0 : 3) + (hasUpdate ? 5.5 : 0) + (showInstall ? 5.5 : 0)
+  const anyBanner = reservedRem > 0
 
   return (
-    <div
-      className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex flex-col items-center gap-2 px-4 pb-4"
-      aria-live="polite"
-    >
+    <>
+      {/* Espaço no fim da página enquanto há aviso: dá para rolar até o rodapé sem nada cobrindo */}
+      {anyBanner && <div aria-hidden="true" style={{ height: `${reservedRem + 1.5}rem` }} />}
+      <div
+        className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex flex-col items-center gap-2 px-4 pb-[max(1rem,env(safe-area-inset-bottom))]"
+        aria-live="polite"
+      >
       {!online && (
         <div
           role="status"
@@ -73,6 +79,7 @@ export default function PwaPrompts({ pwa }) {
           </button>
         </div>
       )}
-    </div>
+      </div>
+    </>
   )
 }

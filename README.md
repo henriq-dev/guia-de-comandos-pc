@@ -21,14 +21,15 @@ npm run preview  # testa o build localmente
 
 ```
 src/
-├── data/
-│   ├── commands.js      ← lista de comandos (adicione novos aqui)
-│   └── steps.js         ← etapas do roteiro de atendimento
-├── components/          ← Navbar, Hero, CommandsPage, CommandCard, RoteiroPage, Footer
-├── hooks/               ← useLocalStorage, useCopy, useReducedMotion
-├── App.jsx              ← estados globais (busca, página, favoritos, checklist)
+├── data/                ← só conteúdo: commands.js, steps.js, routes.js
+├── components/          ← telas e peças (Roteiro dividido em RouteSelector, ProgressCard, StepCard, InlineText)
+├── hooks/               ← useLocalStorage, useCopy, useStopwatch, usePwa, useReducedMotion
+├── utils/               ← regras puras: report.js, history.js, validators.js
+├── App.jsx              ← estados globais (busca, página, favoritos, checklist, histórico)
 ├── main.jsx             ← ponto de entrada
 └── index.css            ← Tailwind + estilos base
+public/                  ← manifest, service worker (sw.js), ícones, cabeçalhos de cache
+tests/                   ← unit/ (npm test) e e2e/ (npm run test:e2e)
 tailwind.config.js       ← cores e fontes do tema (dark + neon)
 ```
 
@@ -74,3 +75,21 @@ Abra `src/data/commands.js` e inclua um objeto na lista:
 
 1. Crie a etapa em `src/data/steps.js` (id único; `report` é a frase para o cliente, ou `null` para não aparecer no relatório).
 2. Inclua o id da etapa na rota desejada em `src/data/routes.js`.
+
+## Observações de manutenção
+
+- **Checklist compartilhado entre rotas:** etapas com o mesmo id (ex.: `p0`, `s1`) aparecem marcadas em todas as rotas que as usam. É intencional.
+- **Dados no navegador:** tudo fica no `localStorage` deste navegador, inclusive nome do cliente e equipamento no histórico. Não use em perfil compartilhado.
+- **Dependências:** `npm audit` mostra 5 avisos só em ferramentas de desenvolvimento (`braces` dentro do Tailwind 3); produção tem 0. Só o Tailwind 4 resolve, e é uma migração própria. Evite `npm audit fix --force` sem testar. Requer Node 18 ou superior.
+
+## Testes
+
+```bash
+npm test            # 14 testes unitários (só precisa do Node)
+npm run build
+npm run test:e2e    # testes de navegador (sobe o site sozinho)
+```
+
+- Os testes de navegador usam o `playwright-core`. Na primeira vez, baixe um navegador com `npx playwright-core install chromium`, ou aponte para o seu Chrome: `CHROME_PATH="C:\Program Files\Google\Chrome\Application\chrome.exe" npm run test:e2e`.
+- `tests/unit/data.test.js` protege o conteúdo: rode `npm test` depois de editar `commands.js`, `steps.js` ou `routes.js`.
+- Capturas de tela de alguns testes vão para a pasta temporária do sistema (ou para `SHOTS_DIR`).

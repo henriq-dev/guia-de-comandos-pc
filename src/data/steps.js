@@ -22,7 +22,7 @@ export const allSteps = [
   {
     id: 's1',
     minutes: 5,
-    phase: 'Primordial',
+    phase: 'Diagnóstico Inicial',
     title: 'Triagem Inicial & Diagnóstico do Hardware',
     intro: 'Antes de alterar qualquer configuração de software, entenda o estado do hardware da máquina do cliente.',
     items: [
