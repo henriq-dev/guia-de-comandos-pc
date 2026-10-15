@@ -1,5 +1,11 @@
 # Histórico de versões
 
+## 2.10.2 — Pré-visualização do link (WhatsApp e redes)
+- Ao enviar o link do site, o WhatsApp mostrava só título e texto, sem imagem. Agora há imagem de capa (`public/og-image.png`, 1200x630) e as tags Open Graph/Twitter no `index.html`.
+- Os endereços das tags (`og:url`, `og:image`) usam `https://guia-de-comandos-pc.vercel.app`. Se o endereço do site mudar, troque nas duas linhas do `index.html`.
+- O WhatsApp guarda a pré-visualização antiga por um tempo. Para ver a nova na hora, envie o link com um sufixo (ex.: `...vercel.app/?v=2`) ou use o Depurador de Compartilhamento do Facebook.
+- Teste novo (`tests/unit/seo.test.js`) confere as tags e o tamanho da imagem.
+
 ## 2.10.1 — Fundo escuro garantido
 - No preview do Claude a página aparecia com fundo branco depois do Tailwind 4: o Tailwind 4 coloca o CSS base em camadas (`@layer`), e CSS "solto" de quem hospeda a página vence as camadas. O fundo e a cor do texto do `body` agora ficam fora de `@layer`, então valem em qualquer hospedagem. Testado com uma página que força fundo branco.
 
