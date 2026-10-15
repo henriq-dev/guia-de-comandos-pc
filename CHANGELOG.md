@@ -1,5 +1,10 @@
 # Histórico de versões
 
+## 2.10.4 — Corrige o deploy na Vercel (postcss.config.js antigo)
+- Causa real da falha: o repositório ainda tinha o `postcss.config.js` da versão anterior, que carrega o `autoprefixer` (removido no Tailwind 4). Ao copiar o zip por cima, arquivos que saíram do projeto não são apagados. Erro no log: "Não foi possível encontrar o módulo 'autoprefixer'".
+- O zip agora traz um `postcss.config.js` vazio, que substitui o antigo ao copiar por cima.
+- Se existir um `tailwind.config.js` no repositório, pode apagar: o Tailwind 4 não usa mais (o tema está em `src/index.css`).
+
 ## 2.10.3 — Node 20 declarado no projeto (deploy na Vercel)
 - O Tailwind 4 só roda em Node 20 ou superior. O `package.json` agora declara `"engines": { "node": ">=20" }`, e a Vercel usa isso para escolher a versão do Node no build. Se o deploy da v2.10.2 falhou por rodar em Node 18, este ajuste resolve.
 - Conferido: instalação limpa (`npm ci`) e build a partir do zip, no Node 22, sem erro.
