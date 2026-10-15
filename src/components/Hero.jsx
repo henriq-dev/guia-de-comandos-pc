@@ -5,7 +5,8 @@ import { prefersReducedMotion } from '../hooks/useReducedMotion'
 
 const subtitles = {
   comandos: 'Manual prático de comandos de CMD e Executar para manutenção, otimização e limpeza profissional do Windows.',
-  roteiro: 'Passo a passo sequencial para triagem, diagnóstico e otimização em atendimentos remotos.'
+  roteiro: 'Passo a passo sequencial para triagem, diagnóstico e otimização em atendimentos remotos.',
+  historico: 'Relatórios dos atendimentos salvos neste aparelho, prontos para copiar ou reenviar.'
 }
 
 export default function Hero({ page, search, onSearch }) {

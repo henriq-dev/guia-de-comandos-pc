@@ -55,3 +55,22 @@ Abra `src/data/commands.js` e inclua um objeto na lista:
 - Favoritos fixos no topo (salvos no navegador)
 - Roteiro com checklist e barra de progresso (salvos no navegador)
 - Animações com GSAP, desligadas para quem usa `prefers-reduced-motion`
+- 4 roteiros por tipo de problema (manutenção completa, computador lento, internet instável, tela azul), cada um começando pelo ponto de restauração quando faz sentido
+- Gerador de relatório para o cliente, com mensagem pronta para WhatsApp (o telefone do cliente nunca é salvo)
+- Histórico dos últimos 50 atendimentos, com busca, copiar, reabrir no WhatsApp e excluir
+- Backup do histórico (exportar e importar .json) e comandos do Roteiro que copiam com um clique
+- Anotação por etapa, cronômetro de atendimento e tempo estimado por rota
+- PWA: instalável como aplicativo e funciona sem internet depois do primeiro acesso
+
+## PWA (instalar e usar offline)
+
+- `public/manifest.webmanifest` e `public/icons/`: nome, cores e ícones do app.
+- `public/sw.js`: guarda o site no aparelho. O `vite.config.js` carimba esse arquivo a cada build, então o deploy novo é sempre percebido e aparece o aviso "Nova versão disponível".
+- `vercel.json` e `public/_headers`: impedem que o `sw.js` fique preso no cache.
+- O service worker só roda no site publicado (HTTPS). No `npm run dev` ele fica desligado.
+- Para testar: `npm run build`, depois `npx vite preview`, e abra no Chrome (Menu → Instalar).
+
+## Como adicionar uma etapa ou rota no Roteiro
+
+1. Crie a etapa em `src/data/steps.js` (id único; `report` é a frase para o cliente, ou `null` para não aparecer no relatório).
+2. Inclua o id da etapa na rota desejada em `src/data/routes.js`.
