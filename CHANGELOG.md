@@ -1,5 +1,10 @@
 # Histórico de versões
 
+## 2.10.3 — Node 20 declarado no projeto (deploy na Vercel)
+- O Tailwind 4 só roda em Node 20 ou superior. O `package.json` agora declara `"engines": { "node": ">=20" }`, e a Vercel usa isso para escolher a versão do Node no build. Se o deploy da v2.10.2 falhou por rodar em Node 18, este ajuste resolve.
+- Conferido: instalação limpa (`npm ci`) e build a partir do zip, no Node 22, sem erro.
+- Se ainda falhar: Vercel → Settings → General → Node.js Version → 22.x (ou 20.x), e refaça o deploy.
+
 ## 2.10.2 — Pré-visualização do link (WhatsApp e redes)
 - Ao enviar o link do site, o WhatsApp mostrava só título e texto, sem imagem. Agora há imagem de capa (`public/og-image.png`, 1200x630) e as tags Open Graph/Twitter no `index.html`.
 - Os endereços das tags (`og:url`, `og:image`) usam `https://guia-de-comandos-pc.vercel.app`. Se o endereço do site mudar, troque nas duas linhas do `index.html`.
