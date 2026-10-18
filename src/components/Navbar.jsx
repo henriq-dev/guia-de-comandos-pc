@@ -19,9 +19,9 @@ export default function Navbar({ page, onChange, historyCount = 0 }) {
             key={id}
             onClick={() => onChange(id)}
             aria-current={active ? 'page' : undefined}
-            className={`flex items-center gap-1.5 rounded-md px-2.5 py-2 text-sm font-bold transition sm:gap-2 sm:px-4 sm:text-base ${
+              className={`flex items-center gap-1.5 rounded-md px-2.5 py-2 text-sm font-bold transition sm:gap-2 sm:px-4 sm:text-base ${
               active
-                ? 'bg-neon/10 text-neon shadow-neon'
+                ? 'bg-neon/10 text-neon nav-active-soft'
                 : 'text-muted hover:bg-white/5 hover:text-white'
             }`}
           >

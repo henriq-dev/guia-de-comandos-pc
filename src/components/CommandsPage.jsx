@@ -8,7 +8,7 @@ import CommandCard from './CommandCard'
 
 export default function CommandsPage({ search, favorites, onToggleFavorite }) {
   const [category, setCategory] = useState('all')
-  const { copiedId, copy } = useCopy()
+  const { copiedId, failedId, copy } = useCopy()
   const grid = useRef(null)
 
   // ÂNCORA: busca + categoria funcionam juntas; favoritos ficam fixos no topo
@@ -50,6 +50,7 @@ export default function CommandsPage({ search, favorites, onToggleFavorite }) {
 
   return (
     <section aria-label="Guia de comandos">
+      <h2 className="sr-only">Comandos disponíveis</h2>
       <div role="group" aria-label="Filtrar por categoria" className="mb-8 flex flex-wrap justify-center gap-2.5">
         {filters.map(({ id, label }) => {
           const active = category === id
@@ -79,6 +80,7 @@ export default function CommandsPage({ search, favorites, onToggleFavorite }) {
             isFavorite={favorites.includes(cmd.id)}
             onToggleFavorite={onToggleFavorite}
             copied={copiedId === cmd.id}
+            failed={failedId === cmd.id}
             onCopy={copy}
           />
         ))}

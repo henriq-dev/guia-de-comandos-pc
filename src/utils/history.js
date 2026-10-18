@@ -89,6 +89,9 @@ function cleanRecord(raw) {
   }
 }
 
+// Confere cada registro já salvo no navegador: um item corrompido (ex.: sem mensagem) é ignorado na tela, não quebra a lista.
+export const cleanHistory = (list) => (Array.isArray(list) ? list.map(cleanRecord).filter(Boolean) : [])
+
 // Lê o arquivo de backup. Devolve { ok: true, records } ou { ok: false, error } com mensagem para a pessoa.
 export function parseBackup(content) {
   let data

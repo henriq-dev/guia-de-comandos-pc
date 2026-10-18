@@ -39,7 +39,7 @@ export default function PwaPrompts({ pwa }) {
           <button
             type="button"
             onClick={update}
-            className="rounded-lg bg-jade px-3 py-1.5 text-xs font-bold text-ink hover:brightness-110"
+            className="rounded-lg bg-jade px-3 py-1.5 text-xs font-bold text-black hover:brightness-110"
           >
             Atualizar agora
           </button>
@@ -65,7 +65,7 @@ export default function PwaPrompts({ pwa }) {
           <button
             type="button"
             onClick={install}
-            className="rounded-lg bg-neon px-3 py-1.5 text-xs font-bold text-ink hover:brightness-110"
+            className="rounded-lg bg-neon px-3 py-1.5 text-xs font-bold text-black hover:brightness-110"
           >
             Instalar
           </button>

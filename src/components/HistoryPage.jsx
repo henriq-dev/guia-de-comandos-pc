@@ -1,10 +1,11 @@
-import { useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import { Inbox, Search, Trash2, Copy, Check, Send, Laptop, CalendarDays, SearchX, Download, Upload } from 'lucide-react'
 import { MAX_HISTORY, buildBackup, parseBackup, mergeRecords, filterRecords, formatDateTime, formatDuration, statusLabel } from '../utils/history'
 import { buildWhatsAppLink } from '../utils/report'
 import { useCopy } from '../hooks/useCopy'
 import { prefersReducedMotion } from '../hooks/useReducedMotion'
+import { scrollRegionWithKeyboard } from '../utils/keyboardScroll'
 
 // ÂNCORA: cor da etiqueta de cada situação (classes completas para o Tailwind enxergar)
 const STATUS_STYLE = {
@@ -69,14 +70,44 @@ function BackupActions({ history, onImport }) {
   )
 }
 
+function DataCareNotice() {
+  return (
+    <aside aria-label="Cuidados com dados e backups" className="w-full rounded-lg border border-amber/25 bg-amber/5 p-3 text-left text-xs leading-relaxed text-muted">
+      <strong className="text-amber">Cuidados com dados e backup</strong>
+      <ul className="mt-1 list-disc space-y-1 pl-5">
+        <li>O histórico fica no armazenamento local deste perfil do navegador. O app não o criptografa nem sincroniza; quem acessar o perfil poderá ver os registros. Não use em perfil compartilhado.</li>
+        <li>O backup é um arquivo JSON legível e contém nomes, equipamento, status e mensagens. O telefone digitado no formulário do relatório não é guardado no histórico. Importe apenas arquivos de origem confiável.</li>
+        <li>Registre só o necessário; não inclua senhas, chaves de licença ou códigos de recuperação. Proteja o perfil/dispositivo, guarde backups em local privado e apague cópias quando não forem mais necessárias. O limite de 50 registros não define prazo de retenção.</li>
+      </ul>
+    </aside>
+  )
+}
+
 export default function HistoryPage({ history, onDelete, onClear, onGoRoteiro, onImport }) {
   const [term, setTerm] = useState('')
   const [confirmId, setConfirmId] = useState(null) // qual card está pedindo confirmação de exclusão
   const [confirmClear, setConfirmClear] = useState(false)
-  const { copiedId, copy } = useCopy()
+  const { copiedId, failedId, copy } = useCopy()
   const root = useRef(null)
+  const confirmButtonRef = useRef(null)
+  const returnFocusRef = useRef(null)
 
   const visible = useMemo(() => filterRecords(history, term), [history, term])
+
+  useEffect(() => {
+    if (confirmClear || confirmId) confirmButtonRef.current?.focus()
+    else if (returnFocusRef.current) {
+      returnFocusRef.current.focus()
+      returnFocusRef.current = null
+    }
+  }, [confirmClear, confirmId])
+
+  const focusAfterHistoryChange = () => {
+    requestAnimationFrame(() => {
+      const target = document.getElementById('busca-historico') || document.querySelector('main section button')
+      target?.focus()
+    })
+  }
 
   // Os cards entram em cascata só ao abrir a página (excluir um card não refaz a animação)
   useLayoutEffect(() => {
@@ -103,6 +134,7 @@ export default function HistoryPage({ history, onDelete, onClear, onGoRoteiro, o
         <p className="text-sm leading-relaxed text-muted">
           Gere um relatório no Roteiro e clique em <strong className="text-white">Salvar no histórico</strong>. Ele aparece aqui, pronto para copiar ou reenviar.
         </p>
+        <DataCareNotice />
         <button
           onClick={onGoRoteiro}
           className="rounded-md bg-jade px-4 py-2 text-sm font-bold text-black shadow-jade transition hover:brightness-110"
@@ -119,16 +151,24 @@ export default function HistoryPage({ history, onDelete, onClear, onGoRoteiro, o
 
   return (
     <section ref={root} aria-label="Histórico de atendimentos" className="mx-auto max-w-3xl">
+      <h2 className="sr-only">Atendimentos salvos</h2>
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm text-muted">
-          <strong className="text-white">{history.length}</strong> {history.length === 1 ? 'atendimento salvo' : 'atendimentos salvos'} · guarda os últimos {MAX_HISTORY}, só neste navegador. Tem nome do cliente e do equipamento: não deixe em perfil compartilhado e guarde o backup com cuidado.
+          <strong className="text-white">{history.length}</strong> {history.length === 1 ? 'atendimento salvo' : 'atendimentos salvos'} · até {MAX_HISTORY}, neste perfil do navegador.
         </p>
 
         {confirmClear ? (
-          <div className="flex items-center gap-2 text-sm">
-            <span className="text-amber">Apagar todo o histórico?</span>
+          <div role="group" aria-label="Confirmar limpeza do histórico" className="flex items-center gap-2 text-sm">
+            <span id="clear-history-description" className="text-amber">Apagar todo o histórico?</span>
             <button
-              onClick={() => { onClear(); setConfirmClear(false) }}
+              ref={confirmButtonRef}
+              aria-describedby="clear-history-description"
+              onClick={() => {
+                returnFocusRef.current = null
+                onClear()
+                setConfirmClear(false)
+                focusAfterHistoryChange()
+              }}
               className="rounded-md bg-red-500/90 px-3 py-1.5 font-semibold text-white transition hover:bg-red-500"
             >
               Sim, apagar
@@ -136,7 +176,7 @@ export default function HistoryPage({ history, onDelete, onClear, onGoRoteiro, o
             <button onClick={() => setConfirmClear(false)} className={actionBtn}>Cancelar</button>
           </div>
         ) : (
-          <button onClick={() => setConfirmClear(true)} className={actionBtn}>
+          <button onClick={(e) => { returnFocusRef.current = e.currentTarget; setConfirmClear(true) }} className={actionBtn}>
             <Trash2 size={14} aria-hidden="true" />
             Limpar histórico
           </button>
@@ -145,6 +185,10 @@ export default function HistoryPage({ history, onDelete, onClear, onGoRoteiro, o
 
       <div className="mb-5">
         <BackupActions history={history} onImport={onImport} />
+      </div>
+
+      <div className="mb-5">
+        <DataCareNotice />
       </div>
 
       <div className="relative mb-6">
@@ -203,7 +247,7 @@ export default function HistoryPage({ history, onDelete, onClear, onGoRoteiro, o
 
               <details className="mt-3">
                 <summary className="w-fit cursor-pointer text-sm font-semibold text-neon hover:underline">Ver mensagem</summary>
-                <pre className="mt-2 max-h-72 overflow-y-auto whitespace-pre-wrap break-words rounded-lg border border-white/10 bg-black p-4 font-mono text-[13px] leading-relaxed text-jade">
+                <pre role="region" aria-label={`Mensagem para ${record.client || 'cliente'}`} tabIndex={0} onKeyDown={scrollRegionWithKeyboard} className="mt-2 max-h-72 overflow-y-auto whitespace-pre-wrap break-words rounded-lg border border-white/10 bg-black p-4 font-mono text-sm leading-relaxed text-jade">
                   {record.message}
                 </pre>
               </details>
@@ -211,7 +255,7 @@ export default function HistoryPage({ history, onDelete, onClear, onGoRoteiro, o
               <div className="mt-4 flex flex-wrap items-center gap-2">
                 <button onClick={() => copy(record.id, record.message)} className={actionBtn}>
                   {copiedId === record.id ? <Check size={14} className="text-jade" aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />}
-                  {copiedId === record.id ? 'Copiado!' : 'Copiar'}
+                  {copiedId === record.id ? 'Copiado!' : failedId === record.id ? 'Não copiou' : 'Copiar'}
                 </button>
                 <a
                   href={buildWhatsAppLink('', record.message)}
@@ -224,10 +268,17 @@ export default function HistoryPage({ history, onDelete, onClear, onGoRoteiro, o
                 </a>
 
                 {confirmId === record.id ? (
-                  <span className="ml-auto flex items-center gap-2 text-sm">
-                    <span className="text-amber">Excluir este registro?</span>
+                  <span role="group" aria-label="Confirmar exclusão do atendimento" className="ml-auto flex items-center gap-2 text-sm">
+                    <span id={`delete-record-description-${record.id}`} className="text-amber">Excluir este registro?</span>
                     <button
-                      onClick={() => { onDelete(record.id); setConfirmId(null) }}
+                      ref={confirmButtonRef}
+                      aria-describedby={`delete-record-description-${record.id}`}
+                      onClick={() => {
+                        returnFocusRef.current = null
+                        onDelete(record.id)
+                        setConfirmId(null)
+                        focusAfterHistoryChange()
+                      }}
                       className="rounded-md bg-red-500/90 px-3 py-1.5 font-semibold text-white transition hover:bg-red-500"
                     >
                       Sim, excluir
@@ -235,7 +286,7 @@ export default function HistoryPage({ history, onDelete, onClear, onGoRoteiro, o
                     <button onClick={() => setConfirmId(null)} className={actionBtn}>Cancelar</button>
                   </span>
                 ) : (
-                  <button onClick={() => setConfirmId(record.id)} className={`${actionBtn} ml-auto hover:border-red-400/60 hover:text-red-300`}>
+                  <button onClick={(e) => { returnFocusRef.current = e.currentTarget; setConfirmId(record.id) }} className={`${actionBtn} ml-auto hover:border-red-400/60 hover:text-red-300`}>
                     <Trash2 size={14} aria-hidden="true" />
                     Excluir
                   </button>

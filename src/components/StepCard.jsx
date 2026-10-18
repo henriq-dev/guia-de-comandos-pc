@@ -1,9 +1,11 @@
 import { Lightbulb, StickyNote, Terminal } from 'lucide-react'
 import InlineText from './InlineText'
+import Sources from './Sources'
+import { stepSources, getSources } from '../data/sources'
 
 // ÂNCORA: um cartão de etapa do roteiro: título, checklist, anotação e dica.
 // Não guarda estado: tudo chega por props e as ações voltam por callbacks.
-export default function StepCard({ step, index, checked, onToggle, note, onNoteChange, copy, copiedId, onOpenGuide }) {
+export default function StepCard({ step, index, checked, onToggle, note, onNoteChange, copy, copiedId, failedId, onOpenGuide }) {
   const hasNote = note.trim() !== ''
 
   return (
@@ -11,7 +13,7 @@ export default function StepCard({ step, index, checked, onToggle, note, onNoteC
       {/* O número da etapa vem da posição na rota, não do dado */}
       <p className="mb-1 text-xs font-extrabold uppercase tracking-widest text-neon">
         Etapa {String(index + 1).padStart(2, '0')} — {step.phase}
-        {step.minutes && <span className="ml-2 font-semibold normal-case tracking-normal text-muted">· ~{step.minutes} min</span>}
+        {step.minutes && <span className="ml-2 font-semibold normal-case tracking-normal text-muted">· ~{step.minutes} min estimados</span>}
       </p>
       <h3 className="mb-2 text-xl font-bold text-white">{step.title}</h3>
       <p className="mb-4 text-sm text-muted">{step.intro}</p>
@@ -30,7 +32,7 @@ export default function StepCard({ step, index, checked, onToggle, note, onNoteC
                 />
                 <span className={`text-[15px] leading-relaxed transition ${isDone ? 'text-muted line-through decoration-white/30' : ''}`}>
                   <strong className="text-white">{item.lead}</strong>{' '}
-                  <InlineText text={item.text} copy={copy} copiedId={copiedId} prefix={`${step.id}-${item.id}`} />
+                  <InlineText text={item.text} copy={copy} copiedId={copiedId} failedId={failedId} prefix={`${step.id}-${item.id}`} />
                 </span>
               </label>
               {item.guide && (
@@ -68,10 +70,12 @@ export default function StepCard({ step, index, checked, onToggle, note, onNoteC
         <p className="mt-4 flex gap-2 rounded-lg border border-amber/30 bg-amber/10 p-3 text-sm text-[#ffca80]">
           <Lightbulb size={18} className="mt-0.5 shrink-0" aria-hidden="true" />
           <span>
-            <strong>Dica do Técnico:</strong> <InlineText text={step.tip} copy={copy} copiedId={copiedId} prefix={`${step.id}-tip`} />
+            <strong>Dica do Técnico:</strong> <InlineText text={step.tip} copy={copy} copiedId={copiedId} failedId={failedId} prefix={`${step.id}-tip`} />
           </span>
         </p>
       )}
+
+      <Sources sources={getSources(stepSources, step.id)} />
     </article>
   )
 }

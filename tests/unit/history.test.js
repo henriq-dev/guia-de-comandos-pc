@@ -55,3 +55,15 @@ test('mergeRecords não repete ids, ordena do mais novo e respeita o limite', ()
   assert.deepEqual(mergeRecords([rec(1), rec(3)], [rec(2), rec(3)]).map((r) => r.id), ['r3', 'r2', 'r1'])
   assert.equal(mergeRecords([], Array.from({ length: 60 }, (_, i) => rec(i))).length, MAX_HISTORY)
 })
+
+// ===== cleanHistory: registro corrompido no navegador não quebra a lista =====
+import { cleanHistory } from '../../src/utils/history.js'
+test('cleanHistory ignora registros inválidos e limita os textos', () => {
+  const ok = { id: 'a', createdAt: '2026-10-01T10:00:00.000Z', client: 'Ana', machine: 'PC', status: 'resolvido', routeLabel: 'R', done: 2, total: 3, durationMs: 1000, message: 'oi' }
+  const list = cleanHistory([ok, { id: 'b', createdAt: '2026-10-01T10:00:00.000Z' }, null, 'x', 7, { ...ok, id: 'c', createdAt: 'lixo' }, { ...ok, id: 'd', done: -5, total: 'x' }])
+  assert.deepEqual(list.map((r) => r.id), ['a', 'd'])
+  assert.equal(list[1].done, 0)
+  assert.equal(list[1].total, 0)
+  assert.deepEqual(cleanHistory('não é lista'), [])
+  assert.deepEqual(cleanHistory(undefined), [])
+})

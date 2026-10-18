@@ -12,7 +12,10 @@ const port = 4173
 const server = await serveDir(DIST, port)
 const env = { ...process.env, APP_URL: process.env.APP_URL || `http://localhost:${port}/` }
 const dir = fileURLToPath(new URL('.', import.meta.url))
-const files = readdirSync(dir).filter((f) => /^\d\d-.*\.mjs$/.test(f)).sort()
+const filter = process.argv[2]?.toLowerCase()
+const files = readdirSync(dir)
+  .filter((f) => /^\d\d-.*\.mjs$/.test(f) && (!filter || f.toLowerCase().includes(filter)))
+  .sort()
 
 let failed = 0
 for (const file of files) {
@@ -31,6 +34,10 @@ for (const file of files) {
   if (falhas > 0 || r.status === 2) failed++
   console.log(`${falhas === 0 && r.status !== 2 ? 'OK    ' : 'FALHOU'} ${file}  (${m ? m[0] : 'sem resumo'})`)
   if (falhas > 0) console.log(out.split('\n').filter((l) => /FALHOU|FAIL|Error/.test(l)).slice(0, 8).join('\n'))
+  else {
+    const details = out.split('\n').filter((line) => /verificações aprovadas/.test(line)).at(-1)
+    if (details) console.log(`       ${details}`)
+  }
 }
 server.close()
 console.log(failed === 0 ? '\nTodos os testes de navegador passaram.' : `\n${failed} arquivo(s) com falha.`)

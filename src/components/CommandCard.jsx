@@ -1,4 +1,6 @@
 import { Star, Copy, Check } from 'lucide-react'
+import Sources from './Sources'
+import { commandSources, getSources } from '../data/sources'
 
 // ÂNCORA: etiqueta de cada tipo de comando
 const TAGS = {
@@ -6,7 +8,7 @@ const TAGS = {
   run: { label: 'Win + R', style: 'bg-jade/15 text-jade', prompt: 'Win+R' }
 }
 
-export default function CommandCard({ command, isFavorite, onToggleFavorite, copied, onCopy }) {
+export default function CommandCard({ command, isFavorite, onToggleFavorite, copied, failed, onCopy }) {
   const { id, type, icon: Icon, title, description, code, guide } = command
   const tag = TAGS[type]
 
@@ -27,7 +29,7 @@ export default function CommandCard({ command, isFavorite, onToggleFavorite, cop
             onClick={() => onToggleFavorite(id)}
             aria-pressed={isFavorite}
             aria-label={isFavorite ? `Remover ${title} dos favoritos` : `Favoritar ${title}`}
-            className={`rounded-md p-1.5 transition hover:bg-white/10 ${isFavorite ? 'text-amber' : 'text-muted hover:text-white'}`}
+            className={`icon-btn rounded-md p-1.5 transition hover:bg-white/10 ${isFavorite ? 'text-amber' : 'text-muted hover:text-white'}`}
           >
             <Star size={18} fill={isFavorite ? 'currentColor' : 'none'} aria-hidden="true" />
           </button>
@@ -54,18 +56,19 @@ export default function CommandCard({ command, isFavorite, onToggleFavorite, cop
               onClick={() => onCopy(id, code)}
               aria-label={`Copiar comando ${code}`}
               className={`flex shrink-0 items-center gap-1.5 rounded px-2 py-1 text-xs transition hover:bg-white/10 ${
-                copied ? 'text-jade' : 'text-muted hover:text-white'
+                copied ? 'text-jade' : failed ? 'text-red-300' : 'text-muted hover:text-white'
               }`}
             >
               {copied ? <Check size={14} aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />}
-              {copied ? 'Copiado!' : 'Copiar'}
+              {copied ? 'Copiado!' : failed ? 'Não copiou' : 'Copiar'}
             </button>
           </div>
         </div>
 
-        <p className="mt-4 border-t border-dashed border-white/10 pt-4 text-[13px] leading-relaxed text-muted">
+        <p className="mt-4 border-t border-dashed border-white/10 pt-4 text-sm leading-relaxed text-muted">
           <strong className="text-amber">Orientação:</strong> {guide}
         </p>
+        <Sources sources={getSources(commandSources, id)} />
       </div>
     </article>
   )

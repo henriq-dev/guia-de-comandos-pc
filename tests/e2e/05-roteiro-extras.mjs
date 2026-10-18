@@ -8,9 +8,10 @@ const p=await (await b.newContext({viewport:{width:1280,height:800}})).newPage()
 await p.goto(U); await p.locator('nav button').nth(1).click(); await p.waitForTimeout(800)
 const k=await p.locator('.step-card p').first().textContent()
 ok(/~\d+ min/.test(k),'tempo na etapa: '+k)
-ok(/~\d+ min no total/.test(await p.locator('text=no total').textContent()),'tempo total')
+const timeCard=()=>p.locator('.glass').filter({hasText:'Progresso do atendimento'}).textContent()
+ok(/soma nominal ~\d+ min/.test(await timeCard()),'tempo total identificado como soma nominal')
 // total completo = 3+5+5+5+25+5 = 48
-ok((await p.locator('text=no total').textContent()).includes('~48'),'total completo 48')
+ok((await timeCard()).includes('~48 min'),'total completo 48')
 ok(await p.getByRole('button',{name:'Ver no Guia'}).count()>=5,'botões Ver no Guia')
 // clicar em "Ver no Guia" do SFC
 const sfc=p.locator('li',{hasText:'Verificação de Integridade'}).getByRole('button',{name:'Ver no Guia'})

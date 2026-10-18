@@ -62,6 +62,11 @@ html body {
   .glass {
     @apply border border-white/10 bg-white/[0.03] backdrop-blur-md;
   }
+
+  /* Brilho mais discreto na aba selecionada, para reduzir fadiga em uso prolongado. */
+  .nav-active-soft {
+    box-shadow: 0 0 8px rgba(0, 240, 255, 0.18);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -73,6 +78,11 @@ html body {
 
 /* Alvos de toque: botões e campos com pelo menos 44px em telas de toque (celular/tablet) */
 @media (pointer: coarse) {
+  /* botões só com ícone (estrela, fechar): também 44px de largura */
+  .icon-btn {
+    min-width: 44px;
+  }
+
   button:not(.inline-code),
   select,
   input:not([type='checkbox']):not([type='radio']),

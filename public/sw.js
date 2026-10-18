@@ -26,13 +26,12 @@ async function precache() {
 
   await cache.put('./index.html', response.clone())
   await cache.put('./', response)
-  await cache.addAll([
-    ...assets,
-    './manifest.webmanifest',
-    './icons/icon.svg',
-    './icons/icon-192.png',
-    './icons/icon-512.png'
-  ])
+  // Essencial: o JS e o CSS do site. Se faltar algum, a instalação falha de propósito (tenta de novo na próxima visita).
+  await cache.addAll(assets)
+  // Opcional: manifest e ícones. Um arquivo que faltar no deploy NÃO pode derrubar o modo offline.
+  await Promise.allSettled(
+    ['./manifest.webmanifest', './icons/icon.svg', './icons/icon-192.png', './icons/icon-512.png'].map((url) => cache.add(url))
+  )
 }
 
 self.addEventListener('activate', (event) => {

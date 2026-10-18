@@ -48,7 +48,7 @@ await p.keyboard.press('Escape'); await p.locator('nav button').nth(2).click(); 
 ok(/(menos de 1 min|\d+ min)/.test(await p.locator('.history-card').first().textContent()),'duração aparece no histórico')
 // novo atendimento zera tudo
 await p.locator('nav button').nth(1).click(); await p.waitForTimeout(700)
-await p.getByRole('button',{name:/Novo atendimento/}).click(); await p.waitForTimeout(500)
+await p.getByRole('button',{name:/Novo atendimento/}).click(); await p.getByRole('button', { name: /Sim, limpar tudo/ }).click(); await p.waitForTimeout(500)
 ok(await clock()==='00:00','novo atendimento zera cronômetro')
 ok(await p.evaluate(()=>JSON.stringify(JSON.parse(localStorage.getItem('katana-notes'))))==='{}','novo atendimento limpa anotações')
 // dado corrompido

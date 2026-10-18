@@ -80,7 +80,7 @@ const stored = await p.evaluate(() => JSON.stringify(Object.fromEntries(Object.e
 ok(!stored.includes('99123'), 'telefone ausente do localStorage')
 await p.keyboard.press('Escape')
 
-await p.getByRole('button', { name: /Novo atendimento/ }).click()
+await p.getByRole('button', { name: /Novo atendimento/ }).click(); await p.getByRole('button', { name: /Sim, limpar tudo/ }).click()
 await p.waitForTimeout(300)
 ok(await p.getByRole('progressbar').getAttribute('aria-valuenow') === '0', 'novo atendimento zera o progresso')
 ok(await p.getByRole('button', { name: 'Gerar relatório para o cliente' }).isDisabled(), 'e desabilita o relatório')

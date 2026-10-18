@@ -27,7 +27,7 @@ export default function RoteiroPage({ checked, setChecked, onSaveHistory, onOpen
   const notes = isPlainObject(savedNotes) ? savedNotes : {}
   const setNote = (stepId, text) => setNotes((c) => ({ ...(isPlainObject(c) ? c : {}), [stepId]: text }))
   const timer = useStopwatch()
-  const { copiedId, copy } = useCopy()
+  const { copiedId, failedId, copy } = useCopy()
 
   // Rota escolhida (salva no navegador). Se o id salvo não existir mais, cai na primeira.
   const [routeId, setRouteId] = useLocalStorage('katana-route', routes[0].id, isString)
@@ -68,6 +68,7 @@ export default function RoteiroPage({ checked, setChecked, onSaveHistory, onOpen
     setPhone('')
     setNotes({})
     timer.reset()
+    requestAnimationFrame(() => root.current?.querySelector('input[type="checkbox"]')?.focus())
   }
 
   // Etapas entram em cascata ao abrir o roteiro e ao trocar de rota
@@ -88,12 +89,14 @@ export default function RoteiroPage({ checked, setChecked, onSaveHistory, onOpen
 
   return (
     <section ref={root} aria-label="Roteiro de atendimento" className="mx-auto max-w-3xl">
+      <h2 className="sr-only">Etapas do roteiro</h2>
       <RouteSelector routeId={route.id} onChange={setRouteId} />
 
       <ProgressCard
         done={done}
         total={itemIds.length}
         totalMinutes={totalMinutes}
+        timeNote={route.timeNote}
         timer={timer}
         hasData={hasData}
         onGenerate={() => setDialogOpen(true)}
@@ -112,6 +115,7 @@ export default function RoteiroPage({ checked, setChecked, onSaveHistory, onOpen
             onNoteChange={(text) => setNote(step.id, text)}
             copy={copy}
             copiedId={copiedId}
+            failedId={failedId}
             onOpenGuide={onOpenGuide}
           />
         ))}

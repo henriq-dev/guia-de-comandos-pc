@@ -1,5 +1,43 @@
 # Histórico de versões
 
+## 2.12.2 — Revisão técnica do Guia e das rotas
+- Guia: DISM/WIM agora explica origens alternativas e confirmação do índice; `/revertpendingactions` foi restrito à recuperação de uma instalação offline que não inicia.
+- Dados e limpeza: temporários, Prefetch, cleanmgr, Downloads, Lixeira e Windows.old agora têm salvaguardas explícitas e não prometem ganho de desempenho.
+- Disco: backup verificado antes de CHKDSK; `/r` descrito sem proibição genérica para SSD; SMART é triagem e não autorização suficiente.
+- Rede e inicialização: ping, DNS, DHCP, Winsock e MSConfig ficaram condicionais, com aviso de queda de conectividade e de retorno de alterações.
+- Tela azul: Kernel-Power 41, memória, drivers e updates são tratados como pistas; a orientação evita atribuir causa sem confirmação.
+- Tempos: os totais continuam sendo a soma nominal das etapas (48/23/18/78 min), agora identificados como não garantidos; esperas variáveis são explicitadas e não foram inventados tempos ativos.
+- Dados: aviso no Histórico e `POLITICA-DADOS-CLIENTES.md` explicam armazenamento local sem criptografia própria, backup JSON legível, minimização, acesso, retenção e descarte; o app não promete apagar cópias externas.
+- Visual: brilho da aba ativa reduzido de 18 px de neon sólido para 8 px com baixa opacidade; foco e contraste textual permanecem.
+- Fontes oficiais atualizadas e testes de regressão acrescentados. Nenhum comando foi executado em computador Windows real; o patch não foi publicado em produção.
+
+## 2.12.1 — Correções e testes de acessibilidade
+- Hierarquia semântica: títulos h2 foram adicionados antes dos títulos h3 no Guia, Roteiro e Histórico.
+- Fontes: links ganharam área clicável de pelo menos 24px de altura e espaçamento suficiente, atendendo ao alvo mínimo WCAG 2.2 AA.
+- Contraste: botões de instalar/atualizar PWA usam texto preto sobre fundos neon; a confirmação destrutiva usa vermelho mais escuro com texto branco.
+- Teclado/foco: prévias e mensagens roláveis são regiões nomeadas e focáveis; confirmar, cancelar ou concluir limpeza/exclusão mantém o foco em um ponto útil.
+- Novo comando `npm run test:a11y`: axe-core 4.14 avalia 11 estados (WCAG 2.0/2.1/2.2 A/AA) e testa navegação por teclado, foco de diálogos, rolagem e árvore de acessibilidade do Chromium.
+- Axe não consegue avaliar automaticamente todos os contrastes sobre os gradientes dos cards; a paleta foi conferida manualmente. A suíte não substitui uma sessão com leitor de tela em aparelho real.
+- Testes: 22 unitários, 10 scripts E2E prévios e o novo teste de acessibilidade passaram no sandbox.
+
+## 2.12.0 — Correções do relatório de erros da v2.11.0
+- **Modo offline mais resistente:** no `sw.js`, só o JS e o CSS do site são essenciais. Manifest e ícones são opcionais (`Promise.allSettled`): um arquivo que faltar no deploy não derruba mais o service worker.
+- **"Copiado!" só quando copiou:** `useCopy` confere o resultado do plano B (`execCommand`) e passa a mostrar **"Não copiou"** quando falha (Guia, Roteiro, Histórico e Relatório). O temporizador de 2s é cancelado ao sair da tela.
+- **Confirmação antes de "Novo atendimento":** agora pede "Sim, limpar tudo" ou "Cancelar" (marcações, anotações, cronômetro e dados do cliente).
+- **Toque:** no celular, estrela (favoritar) e X (fechar) ficam com 44x44. A altura de 44px já existia em todos os botões; faltava a largura dos botões só com ícone.
+- **Leitura:** textos de 13px viraram 14px (orientação dos cards, códigos no Roteiro, pré-visualização da mensagem). Caixas de marcar do relatório: 16px → 20px.
+- **Histórico:** cada registro salvo é conferido ao abrir (`cleanHistory`). Registro corrompido é ignorado na tela, sem "undefined".
+- **Links das fontes:** novo comando `npm run check:links` abre cada link e mostra os que falharam (precisa de internet; não entra no `npm test`).
+- **Decisão (não mudei):** o cronômetro continua rodando se todos os itens forem desmarcados. Ele mede o tempo do atendimento, não do checklist: pausar sozinho faria perder tempo de quem só desmarcou por engano. Para parar, use "Pausar".
+- Testes: 22 unitários (+ `cleanHistory` e service worker) e 10 scripts de navegador (+ `10-confiabilidade`).
+
+## 2.11.0 — Fontes confiáveis em cada comando e etapa
+- Cada card do Guia e cada etapa do Roteiro ganhou a seção **Fontes**, com links para documentação oficial: Microsoft Learn, Suporte Microsoft e o site oficial do CrystalDiskInfo. Os links abrem em nova aba.
+- 21 fontes cadastradas em `src/data/sources.js`, ligadas por id aos 14 comandos e a 11 etapas. O Prefetch ficou sem link de propósito: não achei documentação oficial da Microsoft para ele, e o card avisa "Sem fonte oficial verificada".
+- Alguns links são em inglês (marcados no rótulo) quando a Microsoft não tem a página em português.
+- Teste novo (`tests/unit/sources.test.js` e `tests/e2e/09-fontes.mjs`): só domínios oficiais, https, sem repetição, todo id existe e todo comando foi avaliado. Os textos de `commands.js` e `steps.js` não foram alterados.
+- Limite: não consegui abrir os links por aqui; cada endereço veio de busca no site oficial. Confira os links abrindo-os uma vez (ou rode os testes após editar).
+
 ## 2.10.4 — Corrige o deploy na Vercel (postcss.config.js antigo)
 - Causa real da falha: o repositório ainda tinha o `postcss.config.js` da versão anterior, que carrega o `autoprefixer` (removido no Tailwind 4). Ao copiar o zip por cima, arquivos que saíram do projeto não são apagados. Erro no log: "Não foi possível encontrar o módulo 'autoprefixer'".
 - O zip agora traz um `postcss.config.js` vazio, que substitui o antigo ao copiar por cima.

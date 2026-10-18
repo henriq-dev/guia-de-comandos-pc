@@ -59,7 +59,7 @@ Abra `src/data/commands.js` e inclua um objeto na lista:
 - Gerador de relatório para o cliente, com mensagem pronta para WhatsApp (o telefone do cliente nunca é salvo)
 - Histórico dos últimos 50 atendimentos, com busca, copiar, reabrir no WhatsApp e excluir
 - Backup do histórico (exportar e importar .json) e comandos do Roteiro que copiam com um clique
-- Anotação por etapa, cronômetro de atendimento e tempo estimado por rota
+- Anotação por etapa, cronômetro de atendimento e soma nominal das estimativas por rota (não é prazo garantido; reparos, testes, rede e reinicializações podem acrescentar espera)
 - PWA: instalável como aplicativo e funciona sem internet depois do primeiro acesso
 
 ## PWA (instalar e usar offline)
@@ -78,17 +78,28 @@ Abra `src/data/commands.js` e inclua um objeto na lista:
 ## Observações de manutenção
 
 - **Checklist compartilhado entre rotas:** etapas com o mesmo id (ex.: `p0`, `s1`) aparecem marcadas em todas as rotas que as usam. É intencional.
-- **Dados no navegador:** tudo fica no `localStorage` deste navegador, inclusive nome do cliente e equipamento no histórico. Não use em perfil compartilhado.
+- **Dados no navegador:** favoritos, checklist, notas e histórico ficam no `localStorage` deste perfil do navegador. O app não implementa criptografia nem sincronização. O histórico limita a 50 registros, mas não expira automaticamente.
+- **Dados de clientes e backups:** use apenas os dados necessários; não registre senhas, chaves de licença ou códigos de recuperação. O backup `.json` é texto legível e pode conter nomes, equipamento e mensagens; proteja o dispositivo/perfil e guarde exportações apenas em local privado e com acesso restrito. Importe somente arquivos confiáveis e apague cópias quando não forem mais necessárias. Defina o prazo de retenção com o responsável pela operação; consulte [POLITICA-DADOS-CLIENTES.md](./POLITICA-DADOS-CLIENTES.md).
 - **Dependências:** `npm audit` está em 0 avisos (produção e desenvolvimento) desde o Tailwind 4. O tema (cores, fontes, brilho neon) fica no bloco `@theme` de `src/index.css`; não existe mais `tailwind.config.js`. Requer Node 20 ou superior. Evite `npm audit fix --force` sem testar.
+
+## Como adicionar uma fonte
+As fontes ficam todas em `src/data/sources.js`:
+1. Em `SOURCES`, crie a fonte: `'chave': { label: 'Título (Quem publicou)', url: 'https://...' }`. Use só documentação oficial (`learn.microsoft.com`, `support.microsoft.com` ou o site do próprio programa). Para aceitar outro domínio, inclua-o na lista `ALLOWED` de `tests/unit/sources.test.js`.
+2. Ligue a chave ao comando em `commandSources` ou à etapa em `stepSources`. Lista vazia (`[]`) mostra "Sem fonte oficial verificada".
+3. Rode `npm test`: ele falha se o domínio não for permitido, se o id não existir ou se a fonte não for usada.
 
 ## Testes
 
 ```bash
-npm test            # 14 testes unitários (só precisa do Node)
+npm test            # 23 testes unitários (só precisa do Node)
 npm run build
 npm run test:e2e    # testes de navegador (sobe o site sozinho)
+npm run test:a11y   # axe WCAG A/AA + teclado nos fluxos principais
+npm run check:links # abre cada link de Fontes e mostra os quebrados (precisa de internet)
 ```
 
+- `test:a11y` verifica 11 estados de tela com axe (WCAG 2.0/2.1/2.2 A/AA) e testa navegação por teclado/foco. Alguns contrastes sobre cartões com gradiente ficam inconclusivos no axe e requerem revisão manual; o teste automatizado não substitui avaliação em leitor de tela.
+- O conteúdo do Guia e do Roteiro passou por revisão técnica v2.12.2; os minutos cadastrados são somas nominais por etapa, sem separação medida entre trabalho ativo e espera.
 - Os testes de navegador usam o `playwright-core`. Na primeira vez, baixe um navegador com `npx playwright-core install chromium`, ou aponte para o seu Chrome: `CHROME_PATH="C:\Program Files\Google\Chrome\Application\chrome.exe" npm run test:e2e`.
 - `tests/unit/data.test.js` protege o conteúdo: rode `npm test` depois de editar `commands.js`, `steps.js` ou `routes.js`.
 - Capturas de tela de alguns testes vão para a pasta temporária do sistema (ou para `SHOTS_DIR`).

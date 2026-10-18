@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useLocalStorage } from './hooks/useLocalStorage'
 import { usePwa } from './hooks/usePwa'
 import PwaPrompts from './components/PwaPrompts'
-import { addRecord, removeRecord, mergeRecords } from './utils/history'
+import { addRecord, removeRecord, mergeRecords, cleanHistory } from './utils/history'
 import { isString, isStringArray } from './utils/validators'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
@@ -23,7 +23,7 @@ export default function App() {
 
   // Proteção: se o dado salvo estiver corrompido (não é lista / página desconhecida), usa o padrão
   const page = PAGES.includes(savedPage) ? savedPage : 'comandos'
-  const history = Array.isArray(savedHistory) ? savedHistory : []
+  const history = useMemo(() => cleanHistory(savedHistory), [savedHistory])
 
   // PWA: instalar, atualizar e estado offline
   const pwa = usePwa()
@@ -46,9 +46,9 @@ export default function App() {
     setFavorites((list) => (list.includes(id) ? list.filter((x) => x !== id) : [...list, id]))
 
   const saveToHistory = (record) =>
-    setHistory((list) => addRecord(Array.isArray(list) ? list : [], record))
-  const importHistory = (records) => setHistory((list) => mergeRecords(Array.isArray(list) ? list : [], records))
-  const deleteFromHistory = (id) => setHistory((list) => removeRecord(Array.isArray(list) ? list : [], id))
+    setHistory((list) => addRecord(cleanHistory(list), record))
+  const importHistory = (records) => setHistory((list) => mergeRecords(cleanHistory(list), records))
+  const deleteFromHistory = (id) => setHistory((list) => removeRecord(cleanHistory(list), id))
 
   return (
     <>

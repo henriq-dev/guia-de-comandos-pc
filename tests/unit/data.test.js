@@ -50,3 +50,16 @@ test('botão "Ver no Guia": todo termo encontra ao menos um comando', () => {
     assert.ok(texts.some((t) => t.includes(item.guide.toLowerCase())), `${item.id}: "${item.guide}" não acha nenhum comando`)
   }
 })
+
+test('conteúdo: comandos críticos e tempos mantêm ressalvas de segurança', () => {
+  const byId = Object.fromEntries(commands.map((c) => [c.id, c]))
+  assert.match(byId.revert.code, /\/image:/i)
+  assert.doesNotMatch(byId.revert.code, /\/online/i)
+  assert.match(byId.dism.guide, /Get-ImageInfo/)
+  assert.match(byId['temp-sys'].code, /%windir%\\Temp/i)
+  assert.match(byId.chkdsk.guide, /backup/i)
+  assert.match(byId['chkdsk-ssd'].guide, /não há base para proibi-lo genericamente/i)
+  assert.doesNotMatch(byId['chkdsk-ssd'].guide, /gasta o SSD sem benefício/i)
+  assert.ok(routes.every((route) => route.timeNote?.includes('Soma nominal') || route.timeNote?.includes('Soma nominal,')))
+  assert.match(routes.find((route) => route.id === 'tela-azul').timeNote, /não prazo/i)
+})

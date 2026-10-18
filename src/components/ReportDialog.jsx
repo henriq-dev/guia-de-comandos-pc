@@ -4,6 +4,7 @@ import { X, Copy, Check, Send, Save } from 'lucide-react'
 import { STATUS_OPTIONS, buildMessage, buildWhatsAppLink, getReportItems, normalizePhone } from '../utils/report'
 import { useCopy } from '../hooks/useCopy'
 import { prefersReducedMotion } from '../hooks/useReducedMotion'
+import { scrollRegionWithKeyboard } from '../utils/keyboardScroll'
 
 const inputCls =
   'w-full rounded-lg border border-white/10 bg-ink-900 px-3 py-2.5 text-sm text-white outline-none transition placeholder:text-muted/60 focus:border-neon focus:shadow-neon'
@@ -11,7 +12,7 @@ const labelCls = 'mb-1 block text-xs font-semibold uppercase tracking-wide text-
 
 export default function ReportDialog({ open, onClose, steps, routeLabel, checked, onToggle, report, setReport, phone, setPhone, onSave, onOpenHistory, stepNoteLines = [], durationMs = 0 }) {
   const dialog = useRef(null)
-  const { copiedId, copy } = useCopy()
+  const { copiedId, failedId, copy } = useCopy()
   const [savedMessage, setSavedMessage] = useState('') // texto já salvo: evita registro duplicado
 
   // ÂNCORA: usamos o <dialog> nativo — ele já cuida do foco, do Esc e do fundo escurecido
@@ -69,7 +70,7 @@ export default function ReportDialog({ open, onClose, steps, routeLabel, checked
           <button
             onClick={onClose}
             aria-label="Fechar"
-            className="rounded-md p-1.5 text-muted transition hover:bg-white/10 hover:text-white"
+            className="icon-btn rounded-md p-1.5 text-muted transition hover:bg-white/10 hover:text-white"
           >
             <X size={18} aria-hidden="true" />
           </button>
@@ -139,7 +140,7 @@ export default function ReportDialog({ open, onClose, steps, routeLabel, checked
                           type="checkbox"
                           checked={checked.includes(item.id)}
                           onChange={() => onToggle(item.id)}
-                          className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-[#00ff88]"
+                          className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer accent-[#00ff88]"
                         />
                         <span>{item.report}</span>
                       </label>
@@ -153,7 +154,7 @@ export default function ReportDialog({ open, onClose, steps, routeLabel, checked
           {/* COLUNA 2: pré-visualização e envio */}
           <div className="flex min-w-0 flex-col gap-3">
             <p className={labelCls}>Pré-visualização da mensagem</p>
-            <pre className="max-h-[62vh] overflow-y-auto whitespace-pre-wrap break-words rounded-lg border border-white/10 bg-black p-4 font-mono text-[13px] leading-relaxed text-jade">
+            <pre role="region" aria-label="Pré-visualização da mensagem" tabIndex={0} onKeyDown={scrollRegionWithKeyboard} className="max-h-[62vh] overflow-y-auto whitespace-pre-wrap break-words rounded-lg border border-white/10 bg-black p-4 font-mono text-sm leading-relaxed text-jade">
               {message}
             </pre>
             <p className="text-xs text-muted" aria-live="polite">
@@ -190,7 +191,7 @@ export default function ReportDialog({ open, onClose, steps, routeLabel, checked
             className="order-3 flex items-center justify-center gap-2 rounded-lg border border-white/15 px-3 py-2.5 text-sm font-semibold text-white transition hover:border-neon/60 hover:bg-white/5 sm:order-2 sm:px-4"
           >
             {copiedId === 'relatorio' ? <Check size={16} className="text-jade" aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}
-            {copiedId === 'relatorio' ? 'Copiado!' : (<>Copiar<span className="hidden sm:inline">&nbsp;mensagem</span></>)}
+            {copiedId === 'relatorio' ? 'Copiado!' : failedId === 'relatorio' ? 'Não copiou' : (<>Copiar<span className="hidden sm:inline">&nbsp;mensagem</span></>)}
           </button>
 
           <a
