@@ -6,11 +6,23 @@ O Katana Tech Hub salva favoritos, checklist, notas e histórico no `localStorag
 
 O backup exportado é um arquivo JSON legível, sem criptografia aplicada pelo aplicativo. Ele pode incluir nome do cliente, equipamento, tipo/status do atendimento, duração, texto da mensagem e detalhes escritos nas notas. O número de telefone digitado no formulário do relatório não é guardado no histórico; evite, de todo modo, copiar esse número para notas ou mensagens.
 
+## Valores adotados (definidos pelo responsável; revise quando a operação mudar)
+
+| Tema | Regra adotada |
+|---|---|
+| Prazo de retenção | Apagar do Histórico o atendimento 90 dias depois de encerrado, ou antes, quando o cliente confirmar que está tudo resolvido. |
+| Onde ficam os backups | Só em pasta privada do computador do técnico ou em pendrive próprio. Nunca em WhatsApp, e-mail, drive compartilhado ou link público. |
+| Vida útil do backup | Apagar o arquivo JSON assim que a restauração for conferida, e no máximo 90 dias depois de gerado. |
+| O que registrar | Primeiro nome ou iniciais, equipamento e o que foi feito. Nada de senha, chave de licença, acesso remoto, endereço ou dado financeiro. |
+| Revisão | Uma vez por mês, abrir o Histórico e excluir o que passou do prazo. |
+
+Estes valores são práticas operacionais simples, não parecer jurídico. O aplicativo não apaga nada sozinho: o prazo só vale se a revisão mensal for feita.
+
 ## Procedimento recomendado
 
 1. **Minimização:** registre apenas o que é necessário para executar e documentar o atendimento. Prefira identificador curto ou iniciais quando o nome completo não for necessário. Não registre senhas, códigos de recuperação, chaves de licença, credenciais de acesso remoto, dados financeiros ou outras informações sensíveis.
 2. **Acesso:** use um perfil individual do sistema operacional e do navegador, protegido por senha/bloqueio de tela. Não use o site em computador público, perfil compartilhado ou sessão deixada aberta. Bloqueie o dispositivo ao se afastar.
-3. **Retenção no navegador:** revise o histórico periodicamente e exclua registros encerrados quando já não forem necessários para suporte. O limite de 50 é apenas um teto, não um prazo. O responsável pela operação deve definir o prazo aplicável considerando as necessidades da empresa e obrigações pertinentes.
+3. **Retenção no navegador:** revise o histórico periodicamente e exclua registros encerrados quando já não forem necessários para suporte. O limite de 50 é apenas um teto, não um prazo. O prazo adotado está na tabela acima; mude-o se a empresa ou a lei aplicável exigir outro.
 4. **Exportação:** exporte somente quando necessário para migração ou cópia de segurança. Salve o JSON em pasta privada, com acesso restrito e proteção do dispositivo/volume; se o sistema disponibilizar criptografia de disco ou pasta, use-a. Não coloque o arquivo em link público, pasta compartilhada ampla ou serviço pessoal não autorizado.
 5. **Transporte e restauração:** antes de enviar um backup, confirme destinatário e canal aprovado; proteja o arquivo durante o transporte. Importe apenas backups de origem confiável, confira se os dados foram incorporados corretamente e remova cópias temporárias. A importação mescla registros e o histórico continua limitado aos 50 mais recentes.
 6. **Descarte:** quando a cópia deixar de ser necessária, apague o arquivo do local de armazenamento e de eventuais cópias temporárias. Excluir do aplicativo ou da pasta não equivale a uma promessa de apagamento forense; o tratamento de cópias em nuvem, snapshots e lixeira depende do sistema usado.

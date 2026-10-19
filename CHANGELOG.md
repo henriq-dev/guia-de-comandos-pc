@@ -1,5 +1,10 @@
 # Histórico de versões
 
+## 2.12.3 — Política de dados fechada e roteiro de teste
+- `POLITICA-DADOS-CLIENTES.md`: valores adotados (retenção de 90 dias, backups só em pasta privada ou pendrive próprio, apagar o JSON após restaurar, revisão mensal). O app continua sem apagar nada sozinho.
+- Novo `TESTE-NO-WINDOWS.md`: roteiro para testar os comandos em um Windows real, do mais leve ao mais pesado.
+- Nenhuma mudança no código do app. Links das fontes ainda precisam de `npm run check:links` em máquina com internet.
+
 ## 2.12.2 — Revisão técnica do Guia e das rotas
 - Guia: DISM/WIM agora explica origens alternativas e confirmação do índice; `/revertpendingactions` foi restrito à recuperação de uma instalação offline que não inicia.
 - Dados e limpeza: temporários, Prefetch, cleanmgr, Downloads, Lixeira e Windows.old agora têm salvaguardas explícitas e não prometem ganho de desempenho.

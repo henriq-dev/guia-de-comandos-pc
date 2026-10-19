@@ -1,0 +1,12 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[functions]
+  directory = "netlify/functions"
+
+# /api/diagnostico (o mesmo endereço da Vercel) chama a função da Netlify
+[[redirects]]
+  from = "/api/diagnostico"
+  to = "/.netlify/functions/diagnostico"
+  status = 200
